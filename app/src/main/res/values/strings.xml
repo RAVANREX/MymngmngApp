@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">MnyMngApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Money Manager</string>
+    <string name="nav_header_subtitle">Track your finances</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_profile">Profile</string>
+    <!-- Side nav items -->
+    <string name="menu_dashboard">Dashboards</string>
+    <string name="menu_expense">Expense</string>
+    <string name="menu_mtm">MTM</string>
+    <string name="menu_income">Income</string>
+    <string name="menu_investments">Investments</string>
+    <string name="menu_lend">Lend</string>
+    <string name="menu_loan">Loan</string>
+    <string name="menu_asset">Asset</string>
+    <string name="menu_trip">Trip</string>
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_expense_analysis_loading">Expense Analysis: Loading...</string>
+    <string name="dashboard_investment_growth_loading">Investment Growth: Loading...</string>
+    <string name="expense_view_title">Expense View</string>
+    <string name="fab_add_expense_content_description">Add new expense</string>
+    <string name="mtm_fragment_placeholder">Hello Mtm Fragment</string>
+    <string name="income_fragment_placeholder">Hello Income Fragment</string>
+    <string name="investments_fragment_placeholder">Hello Investments Fragment</string>
+    <string name="lend_fragment_placeholder">Hello Lend Fragment</string>
+    <string name="loan_fragment_placeholder">Hello Loan Fragment</string>
+    <string name="asset_fragment_placeholder">Hello Asset Fragment</string>
+    <string name="trip_fragment_placeholder">Hello Trip Fragment</string>
+</resources>

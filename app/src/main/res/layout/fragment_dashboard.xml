@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/fragment_padding"
+    tools:context=".fragments.DashboardFragment">
+
+    <TextView
+        android:id="@+id/tv_dashboard_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dashboard_title"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_expense_analysis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dashboard_expense_analysis_loading"
+        android:layout_marginTop="@dimen/standard_margin_top" />
+
+    <!-- Placeholder for chart views, e.g., PieChart or BarChart from MPAndroidChart -->
+    <FrameLayout
+        android:id="@+id/chart_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chart_container_height"
+        android:layout_marginTop="@dimen/standard_margin_top"
+        android:background="#EEEEEE" />
+
+    <!-- Add more sections for Investment, Income, etc. -->
+    <TextView
+        android:id="@+id/tv_investment_growth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dashboard_investment_growth_loading"
+        android:layout_marginTop="@dimen/standard_margin_top" />
+
+</LinearLayout>

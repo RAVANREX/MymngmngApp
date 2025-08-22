@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/fragment_dashboard"
+            android:title="@string/menu_dashboard" />
+        <item
+            android:id="@+id/fragment_income"
+            android:title="@string/menu_income" />
+        <item
+            android:id="@+id/fragment_expense"
+            android:title="@string/menu_expense" />
+        <item
+            android:id="@+id/fragment_mtm"
+            android:title="@string/menu_mtm" />
+        <item
+            android:id="@+id/fragment_investments"
+            android:title="@string/menu_investments" />
+        <item
+            android:id="@+id/fragment_lend"
+            android:title="@string/menu_lend" />
+        <item
+            android:id="@+id/fragment_loan"
+            android:title="@string/menu_loan" />
+        <item
+            android:id="@+id/fragment_asset"
+            android:title="@string/menu_asset" />
+        <item
+            android:id="@+id/fragment_trip"
+            android:title="@string/menu_trip" />
+    </group>
+</menu>
