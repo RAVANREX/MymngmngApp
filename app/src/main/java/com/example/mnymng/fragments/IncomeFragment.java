@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.mnymng.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class IncomeFragment extends Fragment {
 
@@ -17,6 +18,14 @@ public class IncomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_income, container, false);
+        View view = inflater.inflate(R.layout.fragment_common, container, false);
+
+        FloatingActionButton buttonOpenDrawer = view.findViewById(R.id.fab_add);
+        buttonOpenDrawer.setOnClickListener(v -> {
+            BottomDrawer bottomDrawerFragment = new BottomDrawer();
+            CataListFragment.screenName = "INCOME";
+            bottomDrawerFragment.show(getParentFragmentManager(), bottomDrawerFragment.getTag());
+        });
+        return view;
     }
 }

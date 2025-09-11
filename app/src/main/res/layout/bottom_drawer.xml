@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="300dp"
+    android:orientation="vertical">
+
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?attr/actionBarSize"-->
+<!--        android:background="@color/my_app_light_blue_toolbar">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnCancel"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start|center_vertical"-->
+<!--            android:text="Cancel"-->
+<!--            android:textColor="@android:color/black"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnNext"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="end|center_vertical"-->
+<!--            android:text="Next"-->
+<!--            android:textColor="@android:color/black"/>-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
+    <!-- Container for fragments -->
+    <FrameLayout
+        android:id="@+id/bottom_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

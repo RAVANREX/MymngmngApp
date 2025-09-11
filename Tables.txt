@@ -1,0 +1,164 @@
+
+Accounts
+account_id
+account_name
+account_type(ENUM Bank/Wallet/Loan/Lending/Credit Card/..etc )
+account_opening_balance
+account_current_balance
+account_interest_rate
+account_due_date
+account_next_due_date
+account_currency
+account_updated_date
+
+Category
+cata_id
+cata_name
+cata_type(ENUM Income/Expense/Trip/Insurance/Investment/..etc )
+cata_icon
+cata_desc
+
+Transaction
+trns_id
+account_id
+cata_id
+trns_type(ENUM credit/debit/transfar)
+trns_amount
+trns_date
+trns_note
+recurring_id
+related_account_id
+
+Transaction_Summary
+trnsum_id
+account_id
+cata_id
+trnsum_type(ENUM credit/debit/transfar)
+trnsum_amount
+trnsum_last_updt
+recurring_id
+
+Recurring
+recurring_id
+account_id
+cata_id
+recurring_amount
+recurring_frequency (ENUM('daily', 'weekly', 'monthly', 'yearly'))
+recurring_sdt
+recurring_edt
+recurring_nxt_duedt
+recurring_alarm_rem
+recurring_is_auto 
+
+Future_Plan
+fplan_id
+fplan_name
+account_id
+cata_id
+fplan_etamount
+fplan_tgdt
+fplan_svamount
+fplan_actual_amount
+fplan_notes
+fplan_priority(ENUM high/med/low)
+fplan_status(ENUM Waiting/inprogress/complete)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Type_Of
+1. Type_id
+2. Type_Name
+3. Type_Int_Name
+4. Type_Behavior(SK) [static function wise name]
+
+Cata_type_of
+1. Cata_Type_Id
+2. Cata_Type(FK)
+3. Cata_Display_Name
+4. Cata_Int_Name
+5. icon_text
+6. Date
+
+Reminder
+1. Rem_Id
+2. Rem_Cata(FK)
+3. Rem_Type(FK)
+4. Rem_name
+5. Rem_Note
+6. Rem_Time
+
+Re_occuring
+1. ReOcc_Id
+2. Cata_Type_Id(FK)
+3. ReOcc_Time
+
+
+Expense
+1. Exps_Id
+2. Cata_Type_Id(FK)
+3. Exps_Name
+4. Exps_Date
+5. Exps_Note
+6. Rem_Id(FK)
+7. ReOcc_Id(FK)
+8. Exps_mtm_id(FK)
+
+Income 
+1. Income_Id
+2. Income_Type
+3. Income_Amt
+
+
+Mtm
+1. Mtm_id
+2. Mtm_type
+3. Mtm_name
+4. Mtm_Amt
+5. mtm_primary
+
+Mtm_Transction 
+1. Mtm_Transction_Id
+2. Mtm_From(FK)
+3. Mtm_to(FK)
+4. mtm_amount
+5. Date
+
+Investment 
+
+Insurance 
+
+Loan
+
+Lending 
+
+Trip

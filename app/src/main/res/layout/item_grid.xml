@@ -6,12 +6,15 @@
     android:gravity="center"
     android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/item_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_foreground" />  <!-- Placeholder; replace with your icon -->
+    <TextView
+        android:id="@+id/item_emoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_grey_round"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:fontFamily="@font/noto_color_emoji"
+        android:text="😀" /> <!-- Placeholder emoji -->
 
     <TextView
         android:id="@+id/item_name"

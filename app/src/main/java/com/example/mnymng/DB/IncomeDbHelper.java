@@ -1,4 +1,3 @@
-'''
 package com.example.mnymng.DB;
 
 import android.content.Context;
@@ -45,4 +44,3 @@ public class IncomeDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 }
-'''

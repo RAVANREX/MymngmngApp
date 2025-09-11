@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/fragment_dashboard">
+    app:startDestination="@+id/fragment_expense">
 
     <fragment
         android:id="@+id/fragment_dashboard"
@@ -15,48 +15,48 @@
         android:id="@+id/fragment_expense"
         android:name="com.example.mnymng.fragments.ExpenseFragment"
         android:label="@string/menu_expense"
-        tools:layout="@layout/fragment_expense" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_mtm"
         android:name="com.example.mnymng.fragments.MtmFragment"
         android:label="@string/menu_mtm"
-        tools:layout="@layout/fragment_mtm" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_income"
         android:name="com.example.mnymng.fragments.IncomeFragment"
         android:label="@string/menu_income"
-        tools:layout="@layout/fragment_income" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_investments"
         android:name="com.example.mnymng.fragments.InvestmentsFragment"
         android:label="@string/menu_investments"
-        tools:layout="@layout/fragment_investments" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_lend"
         android:name="com.example.mnymng.fragments.LendFragment"
         android:label="@string/menu_lend"
-        tools:layout="@layout/fragment_lend" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_loan"
         android:name="com.example.mnymng.fragments.LoanFragment"
         android:label="@string/menu_loan"
-        tools:layout="@layout/fragment_loan" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_asset"
         android:name="com.example.mnymng.fragments.AssetFragment"
         android:label="@string/menu_asset"
-        tools:layout="@layout/fragment_asset" />
+        tools:layout="@layout/fragment_common" />
 
     <fragment
         android:id="@+id/fragment_trip"
         android:name="com.example.mnymng.fragments.TripFragment"
         android:label="@string/menu_trip"
-        tools:layout="@layout/fragment_trip" />
+        tools:layout="@layout/fragment_common" />
 
 </navigation>
