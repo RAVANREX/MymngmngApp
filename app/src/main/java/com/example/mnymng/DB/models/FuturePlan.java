@@ -10,6 +10,7 @@ import com.example.mnymng.DB.enums.PlanPriority;
 import com.example.mnymng.DB.enums.PlanStatus;
 import com.example.mnymng.DB.utils.DateConverter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "future_plan",
@@ -24,7 +25,7 @@ import java.util.Date;
                         onDelete = ForeignKey.SET_NULL) // Or CASCADE
         })
 @TypeConverters(DateConverter.class)
-public class FuturePlan {
+public class FuturePlan implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public long fplan_id;
 
@@ -69,8 +70,7 @@ public class FuturePlan {
     @ColumnInfo(name = "fplan_value5")
     public String fplan_value5;
 
-    public FuturePlan(long fplan_id, String fplan_name, long account_id, Long cata_id, double fplan_etamount, Date fplan_tgdt, double fplan_svamount, double fplan_actual_amount, String fplan_notes, PlanPriority fplan_priority, PlanStatus fplan_status) {
-        this.fplan_id = fplan_id;
+    public FuturePlan(String fplan_name, long account_id, Long cata_id, double fplan_etamount, Date fplan_tgdt, double fplan_svamount, double fplan_actual_amount, String fplan_notes, PlanPriority fplan_priority, PlanStatus fplan_status, String fplan_value1, String fplan_value3, String fplan_value2, String fplan_value4, String fplan_value5) {
         this.fplan_name = fplan_name;
         this.account_id = account_id;
         this.cata_id = cata_id;
@@ -81,5 +81,10 @@ public class FuturePlan {
         this.fplan_notes = fplan_notes;
         this.fplan_priority = fplan_priority;
         this.fplan_status = fplan_status;
+        this.fplan_value1 = fplan_value1;
+        this.fplan_value3 = fplan_value3;
+        this.fplan_value2 = fplan_value2;
+        this.fplan_value4 = fplan_value4;
+        this.fplan_value5 = fplan_value5;
     }
 }

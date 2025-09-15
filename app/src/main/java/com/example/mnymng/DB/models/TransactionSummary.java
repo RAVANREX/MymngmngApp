@@ -9,6 +9,7 @@ import androidx.room.TypeConverters;
 import com.example.mnymng.DB.enums.TransactionType;
 import com.example.mnymng.DB.utils.DateConverter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "transaction_summary",
@@ -27,7 +28,7 @@ import java.util.Date;
                         onDelete = ForeignKey.SET_NULL) // Or CASCADE
         })
 @TypeConverters(DateConverter.class)
-public class TransactionSummary {
+public class TransactionSummary implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public long trnsum_id;
 

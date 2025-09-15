@@ -3,11 +3,15 @@ package com.example.mnymng;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -20,8 +24,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.mnymng.fragments.BottomDrawer;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 public class HomeWindow extends AppCompatActivity {
@@ -48,12 +50,12 @@ public class HomeWindow extends AppCompatActivity {
         drawerLayout = findViewById(R.id.activity_home); // Assuming R.id.fragment_home is your DrawerLayout in fragment_home.xml
 
         NavigationView navView = findViewById(R.id.nav_view);
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
-        ViewGroup.LayoutParams params = navView.getLayoutParams();
-        params.width = screenWidth / 2;
-        navView.setLayoutParams(params);
+         DisplayMetrics displayMetrics = new DisplayMetrics();
+         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+         int screenWidth = displayMetrics.widthPixels;
+         ViewGroup.LayoutParams params = navView.getLayoutParams();
+         params.width = screenWidth / 2;
+         navView.setLayoutParams(params);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
@@ -66,14 +68,73 @@ public class HomeWindow extends AppCompatActivity {
             appBarConfiguration = new AppBarConfiguration.Builder(
                     /* Assuming these are top-level destinations */
                     R.id.fragment_dashboard, R.id.fragment_expense,
-                    R.id.fragment_mtm, R.id.fragment_income,
-                    R.id.fragment_investments, R.id.fragment_lend,
-                    R.id.fragment_loan, R.id.fragment_asset, R.id.fragment_trip)
+                    R.id.fragment_income,
+                   R.id.fragment_trip)
                     .setOpenableLayout(drawerLayout)
                     .build();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(navView, navController);
+
+//            Menu menu = navView.getMenu();
+//            menu.findItem(R.id.fragment_bank).setVisible(false);
+//            menu.findItem(R.id.fragment_wallet).setVisible(false);
+//            menu.findItem(R.id.fragment_loan).setVisible(false);
+//            menu.findItem(R.id.fragment_lending).setVisible(false);
+//            menu.findItem(R.id.fragment_credit_card).setVisible(false);
+//            menu.findItem(R.id.fragment_investment).setVisible(false);
+//            menu.findItem(R.id.fragment_e_wallet).setVisible(false);
+//            menu.findItem(R.id.fragment_asset).setVisible(false);
+
+
+
+
+
+//
+//            navView.setNavigationItemSelectedListener(item -> {
+//               // menu.findItem(R.id.accounts_group).setChecked(true);
+//                // Handle navigation view item clicks here.
+//                int id = item.getItemId();
+//
+//                // Example: Navigate to a destination or perform an action
+//                 if (id == R.id.accounts_group) {
+//                     Log.d("NavDrawer", "onCreate: "+id+"acc"+R.id.accounts_group);
+//                     if(menu.findItem(R.id.fragment_bank).isVisible()){
+//                         menu.findItem(R.id.fragment_bank).setVisible(false);
+//                         menu.findItem(R.id.fragment_wallet).setVisible(false);
+//                         menu.findItem(R.id.fragment_loan).setVisible(false);
+//                         menu.findItem(R.id.fragment_lending).setVisible(false);
+//                         menu.findItem(R.id.fragment_credit_card).setVisible(false);
+//                         menu.findItem(R.id.fragment_investment).setVisible(false);
+//                         menu.findItem(R.id.fragment_e_wallet).setVisible(false);
+//                         menu.findItem(R.id.fragment_asset).setVisible(false);
+//                     }else {
+//                         menu.findItem(R.id.fragment_bank).setVisible(true);
+//                         menu.findItem(R.id.fragment_wallet).setVisible(true);
+//                         menu.findItem(R.id.fragment_loan).setVisible(true);
+//                         menu.findItem(R.id.fragment_lending).setVisible(true);
+//                         menu.findItem(R.id.fragment_credit_card).setVisible(true);
+//                         menu.findItem(R.id.fragment_investment).setVisible(true);
+//                         menu.findItem(R.id.fragment_e_wallet).setVisible(true);
+//                         menu.findItem(R.id.fragment_asset).setVisible(true);
+//                     }
+//
+//                 }
+//                 // else if (id == R.id.another_menu_item_id) {
+//                //     // Do something else
+//                //     Toast.makeText(HomeWindow.this, "Another item clicked", Toast.LENGTH_SHORT).show();
+//                // }
+//
+//                // Close the navigation drawer
+//                //drawerLayout.closeDrawer(GravityCompat.START);
+//                // Return true to display the item as the selected item
+//                // Return false if you don't want to select the item
+//                // If you are using NavigationUI.setupWithNavController,
+//                // it usually handles the navigation and selection state.
+//                // So, you might want to call it or let it handle the event.
+//                // For custom handling, you can return true after handling the navigation.
+//                return NavigationUI.onNavDestinationSelected(item, navController) || HomeWindow.super.onOptionsItemSelected(item);
+//            });
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_home), (v, insets) -> {

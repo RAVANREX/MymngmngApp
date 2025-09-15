@@ -1,14 +1,16 @@
 package com.example.mnymng.DB.enums;
 
-public enum AccountType {
+import java.io.Serializable;
+
+public enum AccountType implements Serializable {
     BANK,
     WALLET,
     LOAN,
     LENDING,
     CREDIT_CARD,
-    INVESTMENT_ACCOUNT,
-    E_WALLET,
+    INSURANCE,
     INVESTMENT,
+    E_WALLET,
     OTHER_ASSET,
     // Add other account types as needed
 }

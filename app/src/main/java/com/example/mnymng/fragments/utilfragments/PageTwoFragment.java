@@ -1,4 +1,4 @@
-package com.example.mnymng.fragments;
+package com.example.mnymng.fragments.utilfragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,11 +30,8 @@ public class PageTwoFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize ViewModel, scoped to the parent Fragment (PopupViewFragment)
-        // Only initialize if not in edit mode, or if specific logic for edit mode is handled
-        if (getArguments() == null || !getArguments().containsKey("categoryDataToEdit")) {
-            emojiViewModel = new ViewModelProvider(requireParentFragment()).get(EmojiViewModel.class);
-        }
+        // Initialize ViewModel, scoped to the parent Fragment (e.g., PopupViewFragment)
+        emojiViewModel = new ViewModelProvider(requireParentFragment()).get(EmojiViewModel.class);
 
         // Retrieve category if passed for editing
         if (getArguments() != null && getArguments().containsKey("categoryDataToEdit")) {
@@ -43,7 +40,6 @@ public class PageTwoFragment extends Fragment {
                 categoryToEdit = (Category) serializableCategory;
             }
         }
-
     }
 
     @Nullable
@@ -70,17 +66,20 @@ public class PageTwoFragment extends Fragment {
             if (emojiTextView != null) {
                 emojiTextView.setText(categoryToEdit.getCata_icon()); // Assuming cata_icon stores the emoji string
             }
+            if (descriptionEditText != null) {
+                descriptionEditText.setText(categoryToEdit.getCata_desc());
+            }
+
             // TODO: Populate other fields like color picker if they exist
         } else {
             // Add mode: Observe ViewModel for emoji changes (presumably from PageOneFragment)
-            if (emojiViewModel != null) {
-                emojiViewModel.getSelectedEmoji().observe(getViewLifecycleOwner(), emoji -> {
-                    // Update the UI
-                    if (emojiTextView != null) {
-                        emojiTextView.setText(emoji);
-                    }
-                });
-            }
+            // emojiViewModel should now always be non-null here if this branch is taken.
+            emojiViewModel.getSelectedEmoji().observe(getViewLifecycleOwner(), emoji -> {
+                // Update the UI
+                if (emojiTextView != null) {
+                    emojiTextView.setText(emoji);
+                }
+            });
         }
     }
     

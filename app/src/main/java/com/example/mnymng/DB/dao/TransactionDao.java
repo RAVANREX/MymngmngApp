@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.example.mnymng.DB.enums.CategoryType; // Added import
 import com.example.mnymng.DB.models.Transaction;
 
 import java.util.List;
@@ -32,4 +33,8 @@ public interface TransactionDao {
 
     @Query("SELECT * FROM transactions WHERE account_id = :accountId ORDER BY trns_date DESC")
     LiveData<List<Transaction>> getTransactionsByAccountId(long accountId);
+
+    // New method to get transactions by CategoryType
+    @Query("SELECT t.* FROM transactions t INNER JOIN categories c ON t.cata_id = c.cata_id WHERE c.cata_type = :categoryType ORDER BY trns_date DESC")
+    LiveData<List<Transaction>> getTransactionsByCategoryType(CategoryType categoryType);
 }

@@ -1,6 +1,8 @@
 package com.example.mnymng.DB.enums;
 
-public enum PlanPriority {
+import java.io.Serializable;
+
+public enum PlanPriority implements Serializable {
     HIGH,
     MEDIUM,
     LOW

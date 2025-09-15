@@ -7,8 +7,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.EdgeToEdge;
 
-import com.example.mnymng.fragments.BottomDrawer;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override

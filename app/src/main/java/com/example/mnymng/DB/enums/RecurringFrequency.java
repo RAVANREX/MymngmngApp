@@ -1,6 +1,8 @@
 package com.example.mnymng.DB.enums;
 
-public enum RecurringFrequency {
+import java.io.Serializable;
+
+public enum RecurringFrequency implements Serializable {
     DAILY,
     WEEKLY,
     MONTHLY,

@@ -1,4 +1,4 @@
-package com.example.mnymng.fragments;
+package com.example.mnymng.fragments.utilfragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +11,6 @@ import android.widget.Toast; // Added import
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager; // Added import
-import androidx.fragment.app.FragmentTransaction; // Added import
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +20,8 @@ import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.models.Category;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.GridAdapter;
+// Import PopupTransactionFragment if it's in a different package, assuming it's in the same for now
+// import com.example.mnymng.fragments.utilfragments.PopupTransactionFragment; 
 import com.example.mnymng.model.MenuItem;
 
 import java.io.Serializable; // Added for passing Category in Bundle
@@ -34,7 +34,7 @@ public class CataListFragment extends Fragment {
     private RecyclerView recyclerView;
     private GridAdapter<MenuItem, MenuItemViewHolder> adapter;
     private CategoryDao categoryDao;
-    public static String screenName;
+    public static CategoryType screenName;
 
     private boolean isEditMode = false; // Flag for edit mode
     private List<Category> currentCategories = new ArrayList<>(); // To store loaded categories
@@ -70,13 +70,7 @@ public class CataListFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 5));
 
         categoryDao = AppDatabase.getDatabase(getContext()).categoryDao();
-
-        CategoryType categoryType = null;
-        if ("EXPENSE".equals(screenName)) {
-            categoryType = CategoryType.EXPENSE;
-        } else if ("INCOME".equals(screenName)) {
-            categoryType = CategoryType.INCOME;
-        }
+        CategoryType categoryType =   screenName != null ? screenName : null;
 
         GridAdapter.ViewHolderFactory<MenuItemViewHolder> factory = MenuItemViewHolder::new;
         GridAdapter.ViewHolderBinder<MenuItem, MenuItemViewHolder> binder = (holder, item) -> holder.bind(item);
@@ -126,6 +120,18 @@ public class CataListFragment extends Fragment {
                 } else {
                     // Handle normal click on category item if needed
                     Log.d("CataListFragment", "Normal click on: " + menuItem.getName());
+                    if (position < currentCategories.size()) {
+                        Category selectedCategory = currentCategories.get(position);
+                        // Changed to PopupTransactionFragment
+                        PopupTransactionFragment popupTransactionFragment = new PopupTransactionFragment();
+                        Bundle bundle = new Bundle();
+                        // Make sure your Category class implements Serializable or Parcelable
+                        // Ensure PopupTransactionFragment expects "transactionAddCall" or adjust as needed
+                        bundle.putSerializable("transactionAddCall", (Serializable) selectedCategory);
+                        popupTransactionFragment.setArguments(bundle);
+                        popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragmentTag"); // Using a new tag
+                    }
+
                 }
             }
         });

@@ -1,8 +1,9 @@
-package com.example.mnymng.fragments;
+package com.example.mnymng.fragments.utilfragments;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log; // Added import
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,21 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.dao.CategoryDao;
+// import com.example.mnymng.DB.models.Transaction; // Removed as transaction logic is moved
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter;
-import com.example.mnymng.DB.models.Category; // Added import for Category
+import com.example.mnymng.DB.models.Category;
 
-import java.io.Serializable; // Added import for Serializable
+import java.io.Serializable;
 import java.util.concurrent.Executors;
 
 public class PopupViewFragment extends DialogFragment {
 
     private Category categoryToEdit; // Field to store category for editing
+    // private Transaction transactionToAdd; // Removed
+    // private boolean isTransaction = false; // Removed
+
+    private final CategoryDao categoryDao = AppDatabase.getDatabase(getContext()).categoryDao();
 
     @Nullable
     @Override
@@ -34,21 +40,21 @@ public class PopupViewFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.popup, container, false);
         ViewPager2 viewPager = view.findViewById(R.id.viewPager);
 
-        // Check for category to edit from arguments (moved here to be available for adapter)
         if (getArguments() != null && getArguments().containsKey("categoryToEdit")) {
             Serializable serializableCategory = getArguments().getSerializable("categoryToEdit");
             if (serializableCategory instanceof Category) {
                 categoryToEdit = (Category) serializableCategory;
             }
         }
+        // Removed transaction argument handling
 
-        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryToEdit); // Pass categoryToEdit
+        // The 'isTransaction' flag will be false, and transactionToAdd will be null for this fragment.
+        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryToEdit,null, null, false, false);
         viewPager.setAdapter(adapter);
 
         viewPager.post(() -> {
             Log.d("PopupViewFragment", "ViewPager2 height: " + viewPager.getMeasuredHeight());
         });
-
 
         return view;
     }
@@ -60,7 +66,6 @@ public class PopupViewFragment extends DialogFragment {
         Button nextButton = view.findViewById(R.id.nextButton);
         Button cancelButton = view.findViewById(R.id.cancelButton);
 
-        // categoryToEdit is already populated in onCreateView if arguments are present
         if (categoryToEdit != null) {
             Log.d("PopupViewFragment", "Editing category: " + categoryToEdit.getCata_name());
         }
@@ -68,76 +73,79 @@ public class PopupViewFragment extends DialogFragment {
         nextButton.setOnClickListener(v -> {
             ViewPager2 viewPager = requireView().findViewById(R.id.viewPager);
             if (viewPager.getAdapter() == null) {
-                return; // Adapter not set, do nothing
+                return;
             }
             int currentItem = viewPager.getCurrentItem();
             int itemCount = viewPager.getAdapter().getItemCount();
 
             PageTwoFragment pageTwoFragment = null;
-            // ... (code to find PageOneFragment if in add mode) ...
+            // Removed TransactionHandelerFragment related code
 
-            // Loop through all fragments managed by PopupViewFragment's ChildFragmentManager
             for (Fragment fragment : getChildFragmentManager().getFragments()) {
                 if (fragment instanceof PageTwoFragment) {
                     pageTwoFragment = (PageTwoFragment) fragment;
-                    break; // Found it
+                    break; 
                 }
             }
 
-
-            if (currentItem < itemCount - 1) { // If not the last page
+            if (currentItem < itemCount - 1) {
                 viewPager.setCurrentItem(currentItem + 1);
-                // Check if the new current page is the last page
                 if (viewPager.getCurrentItem() == itemCount - 1) {
-                    nextButton.setText(categoryToEdit != null ? "Save" : "Submit"); // Change text based on mode
+                    nextButton.setText(categoryToEdit != null ? "Save" : "Submit");
                 } else {
-                    nextButton.setText("Next"); // Ensure it says "Next" on intermediate pages
+                    nextButton.setText("Next");
                 }
-            } else { // currentItem is the last page
-                // Action for "Submit" or "Save" button click
+            } else {
                 if (categoryToEdit != null) {
-                    // Handle SAVE action for editing
                     Log.d("PopupViewFragment", "Saving edited category: " + categoryToEdit.getCata_name());
-                    // TODO: Implement actual save logic (e.g., update database)
                     if (pageTwoFragment != null) {
-                        // Now we have the CURRENT INSTANCE of PageTwoFragment
-                        String emoji = pageTwoFragment.getSelectedEmoji(); // Calling instance method
-                        String name = pageTwoFragment.getCategoryName(); // Calling instance method
-                        String desc = pageTwoFragment.getdescription();      // Calling instance method
-                        // ... and so on
-                        categoryToEdit.setCata_icon(emoji);
-                        categoryToEdit.setCata_name(name);
-                        categoryToEdit.setCata_desc(desc);
-                        // ... and so on
-                        CategoryDao categoryDao = AppDatabase.getDatabase(getContext()).categoryDao();
+                        categoryToEdit.setCata_icon(pageTwoFragment.getSelectedEmoji());
+                        categoryToEdit.setCata_name(pageTwoFragment.getCategoryName()); // Corrected to getCategoryName
+                        categoryToEdit.setCata_desc(pageTwoFragment.getdescription());
+
                         Executors.newSingleThreadExecutor().execute(() -> {
-                                    categoryDao.update(categoryToEdit);
-                                });
-                        // Proceed with database operations using this retrieved data
+                            AppDatabase.getDatabase(getContext()).performDaoAction(categoryDao, dao -> dao.update(categoryToEdit));
+                        });
                     } else {
-                        // Handle case where PageTwoFragment instance wasn't found (should not happen if ViewPager is working)
                         Log.e("PopupViewFragment", "PageTwoFragment instance not found!");
                         Toast.makeText(getContext(), "Error: Could not retrieve form data.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-
-                    // You'll need to collect data from PageOneFragment and PageTwoFragment
                 } else {
-                    // Handle SUBMIT action for adding
                     Log.d("PopupViewFragment", "Submitting new category");
-                    // TODO: Implement actual submit logic (e.g., insert into database)
-                    // You'll need to collect data from PageOneFragment and PageTwoFragment
+                    if (pageTwoFragment != null) {
+                        Category category = new Category(pageTwoFragment.getCategoryName(), CataListFragment.screenName, pageTwoFragment.getSelectedEmoji(), pageTwoFragment.getdescription(),
+                                null,null,null,null,null);
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                             AppDatabase.getDatabase(getContext()).performDaoAction(categoryDao, dao -> dao.insert(category));
+                        });
+                    } else {
+                        Log.e("PopupViewFragment", "PageTwoFragment instance not found!");
+                         Toast.makeText(getContext(), "Error: Could not retrieve form data.", Toast.LENGTH_SHORT).show(); // Added Toast for user feedback
+                    }
                 }
                 dismiss();
             }
         });
 
+        if(categoryToEdit != null ){
+            cancelButton.setText("Delete");
+            cancelButton.setBackgroundColor(Color.RED);
+        }else {
+            cancelButton.setText("Cancel");
+        }
         cancelButton.setOnClickListener(v -> {
-            // Handle Cancel button click
-            dismiss();
+            if (categoryToEdit != null && cancelButton.getText().equals("Delete")) {
+                 // Consider finding PageTwoFragment only if absolutely necessary for delete confirmation, otherwise direct delete is fine.
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    AppDatabase.getDatabase(getContext()).performDaoAction(categoryDao, dao -> dao.delete(categoryToEdit));
+                });
+                dismiss();
+            } else {
+                dismiss(); // Standard cancel
+            }
         });
 
-        // Set initial button text for the last page if already on it
         ViewPager2 viewPager = requireView().findViewById(R.id.viewPager);
         if (viewPager.getAdapter() != null && viewPager.getCurrentItem() == viewPager.getAdapter().getItemCount() - 1) {
             nextButton.setText(categoryToEdit != null ? "Save" : "Submit");
@@ -149,7 +157,6 @@ public class PopupViewFragment extends DialogFragment {
         super.onStart();
         Dialog dialog = getDialog();
         if (dialog != null && dialog.getWindow() != null) {
-            // Make the dialog 80% of screen height and match parent width
             int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.80);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, height);
         }

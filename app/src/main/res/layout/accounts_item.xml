@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card_gradient"
+        android:padding="16dp">
+
+
+
+        <TextView
+            android:id="@+id/originalName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="BANK NAME"/>
+
+        <TextView
+            android:id="@+id/currentBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Balance"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/originalName" />
+
+        <TextView
+            android:id="@+id/remainingBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Remaining"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/currentBalance" />
+
+        <TextView
+            android:id="@+id/cBalanceCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₹"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@id/cBalance"
+            app:layout_constraintBottom_toBottomOf="@id/cBalance" />
+
+        <TextView
+            android:id="@+id/cBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="100000"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/cvv_label"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/cBalanceCurrency"
+            app:layout_constraintTop_toBottomOf="@id/originalName" />
+
+        <TextView
+            android:id="@+id/rBalanceCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₹"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@id/rBalance"
+            app:layout_constraintBottom_toBottomOf="@id/rBalance" />
+
+        <TextView
+            android:id="@+id/rBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            tools:text="2563"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/rBalanceCurrency"
+            app:layout_constraintTop_toBottomOf="@id/cBalance" />
+
+        <Button
+            android:id="@+id/cvv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Pay"
+            android:textAppearance="?attr/textAppearanceCaption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/originalName" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.3005063" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

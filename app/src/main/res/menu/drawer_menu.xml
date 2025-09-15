@@ -5,27 +5,52 @@
         <item
             android:id="@+id/fragment_dashboard"
             android:title="@string/menu_dashboard" />
+    </group>
+
+    <item
+        android:id="@+id/accounts_group"
+        android:title="Accounts">
+        <menu>
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/fragment_bank"
+                android:title="Bank" />
+            <item
+                android:id="@+id/fragment_wallet"
+                android:title="Wallet" />
+            <item
+                android:id="@+id/fragment_loan"
+                android:title="Loan" />
+            <item
+                android:id="@+id/fragment_lending"
+                android:title="Lending" />
+            <item
+                android:id="@+id/fragment_credit_card"
+                android:title="Credit Card" />
+            <item
+                android:id="@+id/fragment_investment"
+                android:title="Investment" />
+            <item
+                android:id="@+id/fragment_insurance"
+                android:title="Insurance" />
+            <item
+                android:id="@+id/fragment_e_wallet"
+                android:title="E Wallet" />
+            <item
+                android:id="@+id/fragment_asset"
+                android:title="Other Asset" />
+            </group>
+        </menu>
+    </item>
+
+
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/fragment_income"
             android:title="@string/menu_income" />
         <item
             android:id="@+id/fragment_expense"
             android:title="@string/menu_expense" />
-        <item
-            android:id="@+id/fragment_mtm"
-            android:title="@string/menu_mtm" />
-        <item
-            android:id="@+id/fragment_investments"
-            android:title="@string/menu_investments" />
-        <item
-            android:id="@+id/fragment_lend"
-            android:title="@string/menu_lend" />
-        <item
-            android:id="@+id/fragment_loan"
-            android:title="@string/menu_loan" />
-        <item
-            android:id="@+id/fragment_asset"
-            android:title="@string/menu_asset" />
         <item
             android:id="@+id/fragment_trip"
             android:title="@string/menu_trip" />

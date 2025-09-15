@@ -5,12 +5,7 @@ import java.io.Serializable; // Added import
 public enum CategoryType implements Serializable { // Added implements Serializable
     INCOME,
     EXPENSE,
-    TRIP,
-    INSURANCE,
-    INVESTMENT,
-    LOAN,
-    LENDING,
-    ASSET
+    TRIP
 
     // Add other category types as needed
 }

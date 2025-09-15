@@ -8,6 +8,7 @@ material = "1.12.0"
 activity = "1.10.1"
 constraintlayout = "2.2.1"
 navigationFragment = "2.9.3"
+navArgs = "2.8.3"
 navigationUi = "2.9.3"
 roomCommonJvm = "2.7.2"
 roomRuntime = "2.7.2"
@@ -29,4 +30,5 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+navigationSafeArgs = { id = "androidx.navigation.safeargs", version.ref = "navArgs" }
 

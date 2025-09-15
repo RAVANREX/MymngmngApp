@@ -47,6 +47,12 @@
             android:layout_height="wrap_content"
             android:hint="Enter category name" />
 
+        <TextView
+            android:id="@+id/nameErrorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/descLabel"
@@ -60,6 +66,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter category description" />
+
+        <TextView
+            android:id="@+id/descErrorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone" />
 
     </LinearLayout>
 

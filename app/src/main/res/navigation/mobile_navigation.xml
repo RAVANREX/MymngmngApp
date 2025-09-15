@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/fragment_expense">
+    app:startDestination="@+id/fragment_dashboard">
 
     <fragment
         android:id="@+id/fragment_dashboard"
@@ -13,50 +13,130 @@
 
     <fragment
         android:id="@+id/fragment_expense"
-        android:name="com.example.mnymng.fragments.ExpenseFragment"
+        android:name="com.example.mnymng.fragments.TransactionTypeFragment"
         android:label="@string/menu_expense"
-        tools:layout="@layout/fragment_common" />
-
-    <fragment
-        android:id="@+id/fragment_mtm"
-        android:name="com.example.mnymng.fragments.MtmFragment"
-        android:label="@string/menu_mtm"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="transaction_type"
+            app:argType="com.example.mnymng.DB.enums.CategoryType"
+            android:defaultValue="EXPENSE" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_income"
-        android:name="com.example.mnymng.fragments.IncomeFragment"
+        android:name="com.example.mnymng.fragments.TransactionTypeFragment"
         android:label="@string/menu_income"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="transaction_type"
+            app:argType="com.example.mnymng.DB.enums.CategoryType"
+            android:defaultValue="INCOME" />
+    </fragment>
 
     <fragment
-        android:id="@+id/fragment_investments"
-        android:name="com.example.mnymng.fragments.InvestmentsFragment"
+        android:id="@+id/fragment_investment"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_investments"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="INVESTMENT" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_insurance"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
+        android:label="Insurance"
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="INSURANCE" />
+    </fragment>
+
 
     <fragment
-        android:id="@+id/fragment_lend"
-        android:name="com.example.mnymng.fragments.LendFragment"
+        android:id="@+id/fragment_lending"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_lend"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="LENDING" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_loan"
-        android:name="com.example.mnymng.fragments.LoanFragment"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_loan"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="LOAN" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_asset"
-        android:name="com.example.mnymng.fragments.AssetFragment"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_asset"
-        tools:layout="@layout/fragment_common" />
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="OTHER_ASSET" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_bank"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
+        android:label="Bank"
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="BANK" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/fragment_wallet"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
+        android:label="Wallet"
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="WALLET" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_credit_card"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
+        android:label="Credit Card"
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="CREDIT_CARD" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_e_wallet"
+        android:name="com.example.mnymng.fragments.AccountsFragment"
+        android:label="E-Wallet"
+        tools:layout="@layout/fragment_common">
+        <argument
+            android:name="account_type"
+            app:argType="com.example.mnymng.DB.enums.AccountType"
+            android:defaultValue="E_WALLET" />
+    </fragment>
     <fragment
         android:id="@+id/fragment_trip"
         android:name="com.example.mnymng.fragments.TripFragment"
         android:label="@string/menu_trip"
         tools:layout="@layout/fragment_common" />
+
+    <!-- Added for Accounts submenu -->
+
 
 </navigation>

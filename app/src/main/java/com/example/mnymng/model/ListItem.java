@@ -4,12 +4,12 @@ import com.example.mnymng.DB.enums.Currency;
 
 public class ListItem {
     private String itemName;
-    private Integer itemValue;
+    private Double itemValue;
     private String currency;
     private String itemType;
     private String Date;
 
-    public ListItem(String itemName, Integer itemValue, String currency, String itemType, String date) {
+    public ListItem(String itemName, Double itemValue, String currency, String itemType, String date) {
         this.itemName = itemName;
         this.itemValue = itemValue;
         this.currency = currency;
@@ -21,7 +21,7 @@ public class ListItem {
         return itemName;
     }
 
-    public Integer getItemValue() {
+    public Double getItemValue() {
         return itemValue;
     }
 
@@ -41,7 +41,7 @@ public class ListItem {
         this.itemName = itemName;
     }
 
-    public void setItemValue(Integer itemValue) {
+    public void setItemValue(Double itemValue) {
         this.itemValue = itemValue;
     }
 

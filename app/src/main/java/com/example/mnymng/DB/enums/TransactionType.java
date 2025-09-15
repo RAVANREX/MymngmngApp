@@ -1,8 +1,9 @@
 package com.example.mnymng.DB.enums;
 
-public enum TransactionType {
+import java.io.Serializable;
+
+public enum TransactionType implements Serializable {
     CREDIT,
     DEBIT,
-    TRANSFER
     // Add other transaction types as needed
 }

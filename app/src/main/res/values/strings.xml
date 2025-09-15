@@ -29,4 +29,39 @@
     <string name="loan_fragment_placeholder">Hello Loan Fragment</string>
     <string name="asset_fragment_placeholder">Hello Asset Fragment</string>
     <string name="trip_fragment_placeholder">Hello Trip Fragment</string>
+
+
+        <string name="label_account">Account:</string>
+        <string name="label_transaction_type">Transaction Type:</string>
+        <string name="label_amount">Amount:</string>
+        <string name="hint_enter_amount">Enter amount</string>
+        <string name="label_date">Date:</string>
+        <string name="hint_select_date">Select date</string>
+        <string name="label_note">Note:</string>
+        <string name="hint_enter_note">Enter note</string>
+        <string name="label_recurring">Recurring:</string>
+        <string name="label_related_account">Related Account (for transfers):</string>
+    <string name="label_recurring_end_date">End Date:</string>
+    <string name="hint_select_recurring_end_date">Select end date (optional)</string>
+    <string name="filter_by_label">Filter by:</string>
+    <string name="sort_by_label">Sort by:</string>
+    <string-array name="filter_options">
+        <item>None</item>
+        <item>This Month</item>
+        <item>Last Month</item>
+        <item>This Year</item>
+        <item>Last Year</item>
+        <item>Custom Date Range...</item> <!-- New option -->
+    </string-array>
+
+    <string-array name="sort_options">
+        <item>None</item>
+        <item>Time (Newest First)</item>
+        <item>Time (Oldest First)</item>
+        <item>Amount (High to Low)</item>
+        <item>Amount (Low to High)</item>
+    </string-array>
+
+
+
 </resources>

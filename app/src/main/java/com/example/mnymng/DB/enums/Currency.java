@@ -1,6 +1,8 @@
 package com.example.mnymng.DB.enums;
 
-public enum Currency {
+import java.io.Serializable;
+
+public enum Currency implements Serializable {
     USD("United States Dollar", "$"),
     EUR("Euro", "€"),
     JPY("Japanese Yen", "¥"),

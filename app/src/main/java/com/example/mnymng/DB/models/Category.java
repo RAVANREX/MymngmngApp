@@ -35,6 +35,18 @@ public class Category implements Serializable { // Added implements Serializable
     @ColumnInfo(name = "cata_value5")
     public String cata_value5;
 
+    public Category(String cata_name, CategoryType cata_type, String cata_icon, String cata_desc, String cata_value1, String cata_value2, String cata_value3, String cata_value4, String cata_value5) {
+        this.cata_name = cata_name;
+        this.cata_type = cata_type;
+        this.cata_icon = cata_icon;
+        this.cata_desc = cata_desc;
+        this.cata_value1 = cata_value1;
+        this.cata_value2 = cata_value2;
+        this.cata_value3 = cata_value3;
+        this.cata_value4 = cata_value4;
+        this.cata_value5 = cata_value5;
+    }
+
     public long getCata_id() {
         return cata_id;
     }
@@ -115,19 +127,7 @@ public class Category implements Serializable { // Added implements Serializable
         this.cata_value5 = cata_value5;
     }
 
-    public Category( String cata_name, CategoryType cata_type, String cata_icon, String cata_desc) {
-        this.cata_name = cata_name;
-        this.cata_type = cata_type;
-        this.cata_icon = cata_icon;
-        this.cata_desc = cata_desc;
-    }
 
-    @Ignore
-    public Category(long cata_id, String cata_name, CategoryType cata_type, String cata_icon, String cata_desc) {
-        this.cata_id = cata_id;
-        this.cata_name = cata_name;
-        this.cata_type = cata_type;
-        this.cata_icon = cata_icon;
-        this.cata_desc = cata_desc;
-    }
+
+
 }

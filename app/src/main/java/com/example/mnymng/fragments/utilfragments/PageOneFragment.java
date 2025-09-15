@@ -1,4 +1,4 @@
-package com.example.mnymng.fragments;
+package com.example.mnymng.fragments.utilfragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

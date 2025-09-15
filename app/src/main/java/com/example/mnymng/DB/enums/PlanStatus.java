@@ -1,6 +1,8 @@
 package com.example.mnymng.DB.enums;
 
-public enum PlanStatus {
+import java.io.Serializable;
+
+public enum PlanStatus implements Serializable {
     WAITING,
     IN_PROGRESS,
     COMPLETE
