@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.DB.models.Category; // Import Category
 import com.example.mnymng.DB.models.Transaction;
@@ -26,15 +27,17 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
     private final Category category; // Category object for category edit mode
     private final Transaction transaction; // Transaction object for transaction add mode
     private final Account account; // Account object for account add/edit mode
+    private final AccountType accountType; // Added for Account Type
     private final boolean isTransactionMode;
     private final boolean isAccountMode; // Added for Account mode
 
     // Constructor updated to accept a generic Fragment
-    public MyViewPagerAdapter(@NonNull Fragment fragment, @Nullable Category category, @Nullable Transaction transaction, @Nullable Account account, boolean isAccountMode, boolean isTransactionMode) {
+    public MyViewPagerAdapter(@NonNull Fragment fragment, @Nullable Category category, @Nullable Transaction transaction, @Nullable Account account,@Nullable AccountType accountType, boolean isAccountMode, boolean isTransactionMode) {
         super(fragment);
         this.category = category;
         this.transaction = transaction;
         this.account = account; // Store the account
+        this.accountType = accountType;
         this.isAccountMode = isAccountMode; // Store isAccountMode
         this.isTransactionMode = isTransactionMode;
     }
@@ -58,6 +61,7 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
         } else if (isAccountMode) { // New block for Account Mode
             AccountHandlerFragment accountHandlerFragment = new AccountHandlerFragment();
             Bundle args = new Bundle();
+            args.putSerializable("accountAddCall", this.accountType);
             if (this.account != null) { // Pass account data if available (e.g., for editing)
                 args.putSerializable("accountToEdit", this.account);
             }

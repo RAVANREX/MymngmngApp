@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.dao.AccountDao;
 import com.example.mnymng.DB.enums.AccountType;
+import com.example.mnymng.DB.logic.TransactionChainingManager;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter; // This adapter might need to be changed or made generic
@@ -70,7 +71,7 @@ public class PopupAccountFragment extends DialogFragment {
         // This likely needs a new adapter or a generic one.
         // For now, passing accountToEdit (if available) or accountToAdd.
         // The adapter needs to be aware if it's in an edit mode for accounts.
-         MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, null, null,accountToEdit != null ? accountToEdit : accountToAdd, true,false); // Pass null for categoryContext or remove
+         MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, null, null,accountToEdit != null ? accountToEdit : accountToAdd,accountType, true,false); // Pass null for categoryContext or remove
          viewPager.setAdapter(adapter); // This will need an appropriate adapter for Accounts
 
         viewPager.post(() -> {
@@ -104,14 +105,8 @@ public class PopupAccountFragment extends DialogFragment {
 
             // This needs to be an AccountHandlerFragment or similar
             // TransactionHandelerFragment transactionHandelerFragment = null;
-            Fragment handlerFragment = null; // Placeholder for a generic or Account specific handler
-            for (Fragment fragment : getChildFragmentManager().getFragments()) {
-                // TODO: Replace TransactionHandelerFragment with the appropriate fragment for accounts
-                // if (fragment instanceof AccountHandlerFragment) {
-                //     handlerFragment = (AccountHandlerFragment) fragment;
-                //     break;
-                // }
-            }
+            Fragment handlerFragment = (AccountHandlerFragment) getChildFragmentManager().getFragments().stream().filter(fragment -> fragment instanceof AccountHandlerFragment).findFirst().orElse(null); // Placeholder for a generic or Account specific handler
+            // TODO: Replace TransactionHandelerFragment with the appropriate fragment for accounts
 
             if (currentItem < itemCount - 1) {
                 viewPager.setCurrentItem(currentItem + 1);
@@ -137,7 +132,7 @@ public class PopupAccountFragment extends DialogFragment {
                             if (accountToEdit != null) { // Redundant check, but safe
                                 Executors.newSingleThreadExecutor().execute(() -> {
                                     // AppDatabase.getDatabase(getContext()).performDaoAction(accountDao, dao -> dao.update(accountToEdit));
-                                    accountDao.update(accountToEdit); // Direct DAO call
+                                    accountDao.update(((AccountHandlerFragment) handlerFragment).getAccountData()); // Direct DAO call
                                 });
                                 Toast.makeText(getContext(), "Account updated", Toast.LENGTH_SHORT).show();
                             } else {
@@ -146,21 +141,25 @@ public class PopupAccountFragment extends DialogFragment {
                         // }
                     } else {
                         Log.d("PopupAccountFrag", "Submitting new account");
-                        // Create a new Account object and populate it
-                        // Example:
-                        // Account newAccount = accountHandlerFragment.getAccountData();
-                        // TODO: Implement actual data retrieval and object creation
-                        // if (accountHandlerFragment != null) { // Replace with actual fragment
-                        //    Account newAccount = accountHandlerFragment.getAccountData();
-                        //    if (newAccount == null) {
-                        //        Toast.makeText(getContext(), "Account data is null", Toast.LENGTH_SHORT).show();
-                        //        return;
-                        //    }
-                        //    Executors.newSingleThreadExecutor().execute(() -> {
-                        //                AppDatabase.getDatabase(getContext()).performDaoAction(accountDao, dao -> dao.insert(newAccount));
-                        //    });
-                        //    Toast.makeText(getContext(), "Account added", Toast.LENGTH_SHORT).show();
-                        // }
+                        // TODO: Ensure 'AccountHandlerFragment' or similar is correctly implemented
+                        // and 'newAccount' is populated with data from the fragment.
+                        // For example:
+                        // AccountHandlerFragment accountHandlerFragment = (AccountHandlerFragment) handlerFragment;
+                         if (handlerFragment != null) {
+                             Account newAccount =  ((AccountHandlerFragment) handlerFragment).getAccountData(); // This needs to be correctly implemented
+                             if (newAccount == null) {
+                                 Toast.makeText(getContext(), "Account data is null", Toast.LENGTH_SHORT).show();
+                                 return;
+                             }
+                             // newAccount.type = accountType; // Ensure accountType is set
+                             Executors.newSingleThreadExecutor().execute(() -> {
+                                 accountDao.insert(newAccount); // Direct DAO call
+                             });
+                             Toast.makeText(getContext(), "Account added", Toast.LENGTH_SHORT).show();
+                         } else {
+                             Log.e("PopupAccountFrag", "Account handler fragment not found or data retrieval failed.");
+                             Toast.makeText(getContext(), "Error: Could not retrieve form data.", Toast.LENGTH_SHORT).show();
+                         }
                     }
                 // } else {
                 //    Log.e("PopupAccountFrag", "AccountHandlerFragment instance not found!");
@@ -189,7 +188,9 @@ public class PopupAccountFragment extends DialogFragment {
         cancelButton.setOnClickListener(v -> {
             if (accountToEdit != null && cancelButton.getText().toString().equalsIgnoreCase("Delete")) {
                 Log.d("PopupAccountFrag", "Deleting account: " + accountToEdit);
-                Executors.newSingleThreadExecutor().execute(() -> accountDao.delete(accountToEdit));
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    TransactionChainingManager.getInstance(getContext()).deleteAccountAndTransactions(accountToEdit);
+                });
                 Toast.makeText(getContext(), "Account deleted", Toast.LENGTH_SHORT).show();
                 dismiss();
             } else {

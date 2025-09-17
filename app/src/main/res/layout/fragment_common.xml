@@ -2,8 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_common"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".fragments.TransactionTypeFragment">
 
     <LinearLayout
         android:id="@+id/filter_sort_section"
@@ -67,7 +69,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
+        android:layout_marginBottom ="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingBottom="16dp"
         android:contentDescription="add"
         android:src="@drawable/ic_add"
         app:tint="@android:color/white" />

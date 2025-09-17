@@ -11,6 +11,7 @@ import androidx.room.Update;
 import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.enums.CategoryType;
 import com.example.mnymng.DB.models.Account;
+import com.example.mnymng.DB.models.Transaction;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public interface AccountDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Account account);
+    long insert(Account account);
 
     @Update
     void update(Account account);
@@ -27,11 +28,12 @@ public interface AccountDao {
     void delete(Account account);
 
     @Query("SELECT * FROM accounts WHERE account_id = :accountId")
-    LiveData<Account> getAccountById(long accountId);
+    Account getAccountById(long accountId);
 
     @Query("SELECT * FROM accounts ORDER BY account_name ASC")
     LiveData<List<Account>> getAllAccounts();
 
     @Query("SELECT * FROM accounts WHERE account_type = :accountType ORDER BY account_name ASC")
     LiveData<List<Account>> getAccountsByType(AccountType accountType); // New method
+
 }

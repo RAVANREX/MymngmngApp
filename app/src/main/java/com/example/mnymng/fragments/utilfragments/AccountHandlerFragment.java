@@ -12,18 +12,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.R;
 import com.example.mnymng.viewmodel.AccountViewModel; // Assuming you have an AccountViewModel
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class AccountHandlerFragment extends Fragment {
 
     private static final String TAG = "AccountHandler";
 
     private AccountViewModel accountViewModel;
+    private AccountType accountType;
+    private Account accountToAdd;
 
     private TextInputEditText accountNameEditText;
     private TextInputEditText accountOpeningBalanceEditText;
@@ -37,10 +41,22 @@ public class AccountHandlerFragment extends Fragment {
         // Ensure AccountViewModel is correctly implemented and available.
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 
-        if (getArguments() != null && getArguments().containsKey("accountToEdit")) {
-            Serializable serializableAccount = getArguments().getSerializable("accountToEdit");
-            if (serializableAccount instanceof Account) {
-                accountToEdit = (Account) serializableAccount;
+        if (getArguments() != null) {
+            if (getArguments().containsKey("accountAddCall")) { // Changed from transactionAddCall
+                // Logic for adding an account if needed, adjust type accordingly
+                Serializable serializableAccount = getArguments().getSerializable("accountAddCall");
+                if (serializableAccount instanceof AccountType) {
+                    // ...
+                    accountType = (AccountType) serializableAccount;
+                    accountToEdit = null; // Ensure only one mode is active
+                }
+            }
+            if (getArguments().containsKey("accountToEdit")) { // Check for accountToEdit
+                Serializable serializableAccount = getArguments().getSerializable("accountToEdit");
+                if (serializableAccount instanceof Account) {
+                    accountToEdit = (Account) serializableAccount;
+                    accountToAdd = null; // Ensure only one mode is active
+                }
             }
         }
     }
@@ -59,13 +75,18 @@ public class AccountHandlerFragment extends Fragment {
         accountNameEditText = view.findViewById(R.id.account_name_edit_text);
         accountOpeningBalanceEditText = view.findViewById(R.id.account_opening_balance_edit_text);
 
+
         if (accountToEdit != null) {
             if (accountNameEditText != null) {
                 accountNameEditText.setText(accountToEdit.getAccount_name());
             }
-            if (accountOpeningBalanceEditText != null) {
+            if (accountOpeningBalanceEditText != null && (accountToEdit.getAccount_type() == AccountType.CREDIT_CARD || accountToEdit.getAccount_type() == AccountType.LOAN ||
+                    accountToEdit.getAccount_type() == AccountType.LENDING)) {
                 // Assuming getOpeningBalance() or a similar method exists and returns a numeric type
                 accountOpeningBalanceEditText.setText(String.valueOf(accountToEdit.getAccount_opening_balance()));
+                //accountOpeningBalanceEditText.setEnabled(true); // Disable editing
+            }else {
+                accountOpeningBalanceEditText.setEnabled(false);
             }
         }
     }
@@ -97,6 +118,10 @@ public class AccountHandlerFragment extends Fragment {
             Toast.makeText(getContext(), "Invalid opening balance.", Toast.LENGTH_SHORT).show();
             return null;
         }
+
+        account.setAccount_type(accountType); // Assuming accountType is set
+        account.setAccount_updated_date(new Date());
+
         
         // You might want to set other Account properties here if needed.
         // For example, if AccountType is determined by some other UI element or logic:

@@ -23,10 +23,18 @@
     </fragment>
 
     <fragment
+        android:id="@+id/accountTransactionFragment"
+        android:name="com.example.mnymng.fragments.TransactionTypeFragment"
+        tools:layout="@layout/fragment_common"/>
+
+    <fragment
         android:id="@+id/fragment_income"
         android:name="com.example.mnymng.fragments.TransactionTypeFragment"
         android:label="@string/menu_income"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="transaction_type"
             app:argType="com.example.mnymng.DB.enums.CategoryType"
@@ -38,6 +46,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_investments"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -48,6 +59,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="Insurance"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -60,6 +74,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_lend"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -71,6 +88,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_loan"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -82,6 +102,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="@string/menu_asset"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -92,6 +115,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="Bank"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -103,6 +129,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="Wallet"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -114,6 +143,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="Credit Card"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"
@@ -125,6 +157,9 @@
         android:name="com.example.mnymng.fragments.AccountsFragment"
         android:label="E-Wallet"
         tools:layout="@layout/fragment_common">
+        <action
+            android:id="@+id/action_accountsFragment_to_accountTransactionFragment"
+            app:destination="@id/accountTransactionFragment" />
         <argument
             android:name="account_type"
             app:argType="com.example.mnymng.DB.enums.AccountType"

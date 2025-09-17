@@ -130,6 +130,7 @@ public class CataListFragment extends Fragment {
                         bundle.putSerializable("transactionAddCall", (Serializable) selectedCategory);
                         popupTransactionFragment.setArguments(bundle);
                         popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragmentTag"); // Using a new tag
+                        // Close the bottom drawer
                     }
 
                 }

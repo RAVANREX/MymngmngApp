@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mnymng.DB.enums.CategoryType;
 import com.example.mnymng.DB.enums.Currency;
+import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.DB.models.Transaction;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.GridAdapter;
@@ -43,7 +45,7 @@ import java.util.stream.Collectors;
 
 public class TransactionTypeFragment extends Fragment {
     public static CategoryType categoryType;
-
+    private Account currentAccount;
     private RecyclerView recyclerView;
     private GridAdapter<ListItem, MyListItemViewHolder> adapter;
     private Spinner spinnerFilter;
@@ -94,6 +96,18 @@ public class TransactionTypeFragment extends Fragment {
                 itemName.setText(item.getItemName());
                 itemValue.setText(item.getItemValue().toString());
                 currency.setText(item.getcurrency());
+
+                try {
+                    double value = Double.parseDouble(item.getItemValue().toString());
+                    if (value < 0) {
+                        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.light_red));
+                    } else {
+                        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.light_green));
+                    }
+                } catch (NumberFormatException e) {
+                    // Handle case where itemValue is not a valid number, perhaps set a default background
+                    itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.white)); // Or any other default color
+                }
             }
         }
     }
@@ -105,9 +119,31 @@ public class TransactionTypeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            categoryType = TransactionTypeFragmentArgs.fromBundle(getArguments()).getTransactionType();
+//        }
+//        Bundle arguments = getArguments();
         if (getArguments() != null) {
-            categoryType = TransactionTypeFragmentArgs.fromBundle(getArguments()).getTransactionType();
+            if (getArguments().containsKey("selectedAccount")) {
+                currentAccount = (Account) getArguments().getSerializable("selectedAccount");
+                categoryType = null;
+                Log.i("TransactionTypeFragment", "Received Account: " + (currentAccount != null ? currentAccount.getAccount_name() : "null"));
+            }
+
+            // CategoryType can be passed alongside an account, or as the primary argument
+            if (getArguments().containsKey("transaction_type")) {
+                categoryType = TransactionTypeFragmentArgs.fromBundle(getArguments()).getTransactionType();
+                Log.i("TransactionTypeFragment", "Received CategoryType: " + categoryType);
+            }
         }
+
+        if (currentAccount == null && categoryType == null) {
+            Log.e("TransactionTypeFragment", "CRITICAL: No Account or CategoryType provided. Fragment may not function correctly.");
+            // Consider setting a default or showing an error message to the user / navigating back.
+            // For now, we'll let it proceed, but loadInitialTransactions will likely show nothing.
+            // categoryType = CategoryType.EXPENSE; // Example fallback
+        }
+
     }
 
     @Override
@@ -115,14 +151,18 @@ public class TransactionTypeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_common, container, false);
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
-
         FloatingActionButton buttonOpenDrawer = view.findViewById(R.id.fab_add);
-        buttonOpenDrawer.setOnClickListener(v -> {
-            BottomDrawer bottomDrawerFragment = new BottomDrawer();
-            CataListFragment.screenName = categoryType;
-            bottomDrawerFragment.show(getParentFragmentManager(), bottomDrawerFragment.getTag());
-        });
-
+        if (categoryType != null) {
+            if(currentAccount == null) {
+                buttonOpenDrawer.setOnClickListener(v -> {
+                    BottomDrawer bottomDrawerFragment = new BottomDrawer();
+                    CataListFragment.screenName = categoryType;
+                    bottomDrawerFragment.show(getParentFragmentManager(), bottomDrawerFragment.getTag());
+                });
+            }
+        }else {
+            buttonOpenDrawer.setVisibility(View.GONE);
+        }
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
@@ -251,13 +291,25 @@ public class TransactionTypeFragment extends Fragment {
 
 
     private void loadInitialTransactions() {
-        transactionViewModel.getTransactionsByCategoryType(categoryType).observe(getViewLifecycleOwner(), transactions -> {
-            allTransactions.clear();
-            if (transactions != null) {
-                allTransactions.addAll(transactions);
-            }
-            applyFiltersAndSort();
-        });
+        if (categoryType != null) {
+            transactionViewModel.getTransactionsByCategoryType(categoryType).observe(getViewLifecycleOwner(), transactions -> {
+                allTransactions.clear();
+                if (transactions != null) {
+                    allTransactions.addAll(transactions);
+                }
+                applyFiltersAndSort();
+            });
+
+        }
+        if(currentAccount != null) {
+            transactionViewModel.getTransactionsByAccountId(currentAccount.getAccount_id()).observe(getViewLifecycleOwner(), transactions -> {
+                allTransactions.clear();
+                if (transactions != null) {
+                    allTransactions.addAll(transactions);
+                }
+                applyFiltersAndSort();
+            });
+        }
     }
 
     private void applyFiltersAndSort() {

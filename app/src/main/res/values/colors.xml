@@ -19,5 +19,7 @@
     <color name="my_app_nav_item_normal">#757575</color>
     <color name="my_app_nav_item_selected">@color/my_app_primary</color>
     
-    <color name="my_app_light_blue_toolbar">#4FC3F7</color> 
+    <color name="my_app_light_blue_toolbar">#4FC3F7</color>
+    <color name="light_red">#FFCDD2</color> <!-- Light Red -->
+    <color name="light_green">#C8E6C9</color> <!-- Light Green -->
 </resources>

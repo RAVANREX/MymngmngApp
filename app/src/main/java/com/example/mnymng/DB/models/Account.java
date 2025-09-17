@@ -1,6 +1,7 @@
 package com.example.mnymng.DB.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.TypeConverters;
@@ -16,6 +17,7 @@ import java.util.Date;
 @TypeConverters(DateConverter.class)
 public class Account implements Serializable {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "account_id")
     public long account_id;
 
     @ColumnInfo(name = "account_name")
@@ -63,6 +65,7 @@ public class Account implements Serializable {
     @ColumnInfo(name = "account_value5")
     public String account_value5;
 
+    @Ignore
     public Account() {
     }
 

@@ -39,8 +39,6 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation" />
 
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

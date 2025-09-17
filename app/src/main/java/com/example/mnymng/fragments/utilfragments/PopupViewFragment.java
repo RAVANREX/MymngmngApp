@@ -49,7 +49,7 @@ public class PopupViewFragment extends DialogFragment {
         // Removed transaction argument handling
 
         // The 'isTransaction' flag will be false, and transactionToAdd will be null for this fragment.
-        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryToEdit,null, null, false, false);
+        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryToEdit,null, null, null,false, false);
         viewPager.setAdapter(adapter);
 
         viewPager.post(() -> {

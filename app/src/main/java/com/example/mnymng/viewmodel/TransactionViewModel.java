@@ -39,7 +39,13 @@ public class TransactionViewModel extends AndroidViewModel {
     public LiveData<List<Account>> getAccountsByType(AccountType accountType) {
         return accountDao.getAccountsByType(accountType);
     }
+    public LiveData<List<Transaction>> getTransactionsByAccountId(long accountId) { // Assuming ID is long
+        return transactionDao.getTransactionsByAccountId(accountId);
+    }
 
+//    public LiveData<List<Transaction>> getTransactionsByAccountAndCategory(long accountId, CategoryType categoryType) {
+//        return transactionDao.getTransactionsByAccountAndCategory(accountId, categoryType.toString()); // Assuming categoryType is stored as String in DB
+//    }
     /**
      * Fetches transactions based on the specified category type.
      * This method directly calls the DAO's getTransactionsByCategoryType method.

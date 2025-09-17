@@ -1,6 +1,7 @@
 package com.example.mnymng.DB.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.ForeignKey;
@@ -61,6 +62,7 @@ public class Transaction implements Serializable {
     @ColumnInfo(name = "trns_value5")
     public String trns_value5;
 
+    @Ignore
     public Transaction(){}
 
     public Transaction(long account_id, Long cata_id, String trns_name, TransactionType trns_type, double trns_amount, Date trns_date, String trns_note, Long recurring_id, Long related_account_id, String trns_value1, String trns_value2, String trns_value3, String trns_value4, String trns_value5) {

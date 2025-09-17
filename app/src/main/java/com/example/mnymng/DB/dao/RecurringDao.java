@@ -23,10 +23,19 @@ public interface RecurringDao {
 
     @Delete
     void delete(Recurring recurring);
+    @Delete
+    void deleteAll(List<Recurring> recurring);
+    @Query("SELECT * FROM recurring")
+    List<Recurring> getAllRecurring();
+
+
 
     @Query("SELECT * FROM recurring WHERE recurring_id = :recurringId")
     LiveData<Recurring> getRecurringById(long recurringId);
 
     @Query("SELECT * FROM recurring ORDER BY recurring_sdt DESC")
     LiveData<List<Recurring>> getAllRecurringTransactions();
+
+    @Query("SELECT * FROM recurring WHERE recurring_edt IS NOT NULL AND recurring_edt < recurring_nxt_duedt")
+    List<Recurring> getCompletedRecurring();
 }

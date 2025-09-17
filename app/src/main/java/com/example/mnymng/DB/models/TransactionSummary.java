@@ -32,10 +32,10 @@ public class TransactionSummary implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public long trnsum_id;
 
-    @ColumnInfo(name = "account_id")
+    @ColumnInfo(name = "account_id", index = true)
     public long account_id;
 
-    @ColumnInfo(name = "cata_id")
+    @ColumnInfo(name = "cata_id", index = true)
     public Long cata_id; // Allow NULL if category can be optional or deleted
 
     @ColumnInfo(name = "trnsum_type")
@@ -47,7 +47,7 @@ public class TransactionSummary implements Serializable {
     @ColumnInfo(name = "trnsum_last_updt")
     public Date trnsum_last_updt;
 
-    @ColumnInfo(name = "recurring_id")
+    @ColumnInfo(name = "recurring_id", index = true)
     public Long recurring_id; // Allow NULL if recurring can be optional or deleted
     
     @ColumnInfo(name = "trnsum_value1")

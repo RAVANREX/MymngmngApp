@@ -17,6 +17,7 @@ import com.example.mnymng.DB.dao.TransactionDao;
 import com.example.mnymng.DB.dao.TransactionSummaryDao;
 import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.enums.CategoryType;
+import com.example.mnymng.DB.enums.RecurringFrequency;
 import com.example.mnymng.DB.enums.TransactionType;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.DB.models.Category;
@@ -168,6 +169,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
 
                 long dayMillis = TimeUnit.DAYS.toMillis(1);
+                long monthMillis = TimeUnit.DAYS.toMillis(30); // Approx for a month
 
                 // Original Transactions (14 params for constructor, using fully qualified enums)
                 // Assuming Category IDs 1 (Salary), 6 (Groceries), 16 (Stocks) and Account IDs 1 (Main Bank Account), 2 (Credit Card Gold), 3 (Cash Wallet)
@@ -200,8 +202,27 @@ public abstract class AppDatabase extends RoomDatabase {
                 transactionDao.insert(new Transaction(8L, 48L, "Lending Club Note", TransactionType.DEBIT, -150.00, new Date(System.currentTimeMillis() - 12*dayMillis), null, null, null, "P2P Platform", null, null, null, null)); // PayPal Balance, Peer-to-Peer Lending
                 transactionDao.insert(new Transaction(10L, 8L, "Water & Electricity Bill", TransactionType.DEBIT, -180.00, new Date(System.currentTimeMillis() - 11*dayMillis), null, null, null, "City Utilities", null, null, null, null)); // Student Loan Account, Utilities
 
-
-
+                // NEW Recurring Data
+                // account_id, cata_id, lastTransactionId, recurring_amount, recurring_frequency, recurring_sdt, recurring_edt, recurring_nxt_duedt, recurring_alarm_rem, recurring_is_auto, v1, v2, v3, v4, v5
+                recurringDao.insert(new Recurring(1L, 7L, null, 1200.00, RecurringFrequency.MONTHLY, new Date(123, 2, 1), new Date(125, 0, 15), new Date(125, 0, 10), true, true, "Rent Payment", null, null, null, null));
+                recurringDao.insert(new Recurring(1L, 1L, null, 2500.00, RecurringFrequency.MONTHLY, new Date(123, 2, 5), new Date(125, 0, 25), new Date(125, 0, 20), true, true, "Salary Deposit", null, null, null, null));
+                recurringDao.insert(new Recurring(2L, 15L, null, 15.00, RecurringFrequency.MONTHLY, new Date(123, 2, 10), new Date(125, 1, 10), new Date(125, 1, 5), true, false, "Music Subscription", null, null, null, null));
+                recurringDao.insert(new Recurring(1L, 8L, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 2, 15), new Date(125, 1, 20), new Date(125, 1, 15), true, true, "Utilities Bill", null, null, null, null));
+                recurringDao.insert(new Recurring(4L, 25L, null, 75.00, RecurringFrequency.QUARTERLY, new Date(123, 3, 1), new Date(125, 2, 15), new Date(125, 2, 10), false, true, "Book Royalties", null, null, null, null));
+                recurringDao.insert(new Recurring(6L, 16L, null, 500.00, RecurringFrequency.MONTHLY, new Date(123, 3, 5), new Date(125, 2, 25), new Date(125, 2, 20), true, true, "Monthly Investment", "Stocks", null, null, null));
+                recurringDao.insert(new Recurring(7L, 37L, null, 90.00, RecurringFrequency.MONTHLY, new Date(123, 3, 10), new Date(125, 3, 10), new Date(125, 3, 5), true, false, "Gym Membership", null, null, null, null));
+                recurringDao.insert(new Recurring(9L, null, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 3, 15), new Date(125, 3, 20), new Date(125, 3, 15), true, true, "Loan Repayment", "Student Loan", null, null, null));
+                recurringDao.insert(new Recurring(1L, 15L, null, 10.00, RecurringFrequency.MONTHLY, new Date(123, 4, 1), new Date(125, 4, 15), new Date(125, 4, 10), false, false, "Cloud Storage", null, null, null, null));
+                recurringDao.insert(new Recurring(5L, 31L, null, 25.00, RecurringFrequency.WEEKLY, new Date(123, 4, 5), new Date(125, 4, 25), new Date(125, 4, 20), false, true, "Pet Food Subscription", null, null, null, null));
+                recurringDao.insert(new Recurring(12L, null, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 4, 10), new Date(125, 5, 10), new Date(125, 5, 5), true, true, "Vacation Savings Deposit", null, null, null, null));
+                recurringDao.insert(new Recurring(1L, 4L, null, 300.00, RecurringFrequency.QUARTERLY, new Date(123, 4, 15), new Date(125, 5, 20), new Date(125, 5, 15), true, true, "Property Tax Savings", null, null, null, null));
+                recurringDao.insert(new Recurring(8L, 26L, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 5, 1), new Date(125, 6, 15), new Date(125, 6, 10), false, true, "Cashback Rewards Transfer", null, null, null, null));
+                recurringDao.insert(new Recurring(6L, 17L, null, 100.00, RecurringFrequency.MONTHLY, new Date(123, 5, 5), new Date(125, 6, 25), new Date(125, 6, 20), true, true, "Mutual Fund SIP", null, null, null, null));
+                recurringDao.insert(new Recurring(1L, 38L, null, 20.00, RecurringFrequency.YEARLY, new Date(123, 5, 10), new Date(125, 7, 10), new Date(125, 7, 5), true, false, "Charity Donation", "Annual", null, null, null));
+                recurringDao.insert(new Recurring(11L, 19L, null, 50.00, RecurringFrequency.WEEKLY, new Date(123, 5, 15), new Date(125, 7, 20), new Date(125, 7, 15), false, true, "Crypto DCA", "Bitcoin", null, null, null));
+                recurringDao.insert(new Recurring(4L, 24L, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 0, 10), new Date(125, 8, 15), new Date(125, 8, 10), true, true, "Interest Income Transfer", null, null, null, null));
+                recurringDao.insert(new Recurring(2L, 42L, null, 30.00, RecurringFrequency.MONTHLY, new Date(123, 0, 20), new Date(125, 9, 25), new Date(125, 9, 20), false, true, "Software Subscription", "IDE", null, null, null));
+                recurringDao.insert(new Recurring(10L, null, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 1, 5), new Date(125, 10, 10), new Date(125, 10, 1), true, true, "Personal Loan EMI", null, null, null, null));
 
 
             });

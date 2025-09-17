@@ -18,10 +18,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.dao.TransactionDao;
+import com.example.mnymng.DB.logic.TransactionChainingManager;
 import com.example.mnymng.DB.models.Transaction;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter;
-import com.example.mnymng.DB.models.Category; // Keep for now, might be needed by adapter or shared logic
+import com.example.mnymng.DB.models.Category;
 
 import java.io.Serializable;
 import java.util.concurrent.Executors;
@@ -29,11 +30,9 @@ import java.util.concurrent.Executors;
 public class PopupTransactionFragment extends DialogFragment {
 
     private Transaction transactionToAdd;
-    private Transaction transactionToEdit; // Field to store transaction for editing
-    // private Category categoryToEdit; // Removed as per focus on transaction editing
-
-    private TransactionDao transactionDao; // Added TransactionDao
-    private Category categoryContext; // Added category context
+    private Transaction transactionToEdit;
+    private TransactionDao transactionDao;
+    private Category categoryContext;
 
     @Nullable
     @Override
@@ -75,7 +74,7 @@ public class PopupTransactionFragment extends DialogFragment {
         // Adapt MyViewPagerAdapter or ensure it can handle transactionToEdit.
         // For now, passing transactionToEdit (if available) or transactionToAdd.
         // The adapter needs to be aware if it's in an edit mode for transactions.
-        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryContext, transactionToEdit != null ? transactionToEdit : transactionToAdd,null, false,true);
+        MyViewPagerAdapter adapter = new MyViewPagerAdapter(this, categoryContext, transactionToEdit != null ? transactionToEdit : transactionToAdd,null, null,false,true);
         viewPager.setAdapter(adapter);
 
         viewPager.post(() -> {
@@ -104,13 +103,8 @@ public class PopupTransactionFragment extends DialogFragment {
             int currentItem = viewPager.getCurrentItem();
             int itemCount = viewPager.getAdapter().getItemCount();
 
-            TransactionHandelerFragment transactionHandelerFragment = null;
-            for (Fragment fragment : getChildFragmentManager().getFragments()) {
-                if (fragment instanceof TransactionHandelerFragment) {
-                    transactionHandelerFragment = (TransactionHandelerFragment) fragment;
-                    break;
-                }
-            }
+            TransactionHandelerFragment transactionHandelerFragment = (TransactionHandelerFragment) getChildFragmentManager().getFragments().stream()
+                    .filter(fragment -> fragment instanceof TransactionHandelerFragment).findFirst().orElse(null);
 
             if (currentItem < itemCount - 1) {
                 viewPager.setCurrentItem(currentItem + 1);
@@ -133,12 +127,12 @@ public class PopupTransactionFragment extends DialogFragment {
 
                         // Executors.newSingleThreadExecutor().execute(() -> transactionDao.update(transactionToEdit));
                         if (transactionHandelerFragment != null) {
-                            transactionToEdit.setTrns_amount( transactionHandelerFragment.getTransactionData().getTrns_amount());
-                            transactionToEdit.setTrns_note(transactionHandelerFragment.getTransactionData().getTrns_note());
-                            transactionToEdit.setTrns_date(transactionHandelerFragment.getTransactionData().getTrns_date());
+//                            transactionToEdit.setTrns_amount( transactionHandelerFragment.getTransactionData().getTrns_amount());
+//                            transactionToEdit.setTrns_note(transactionHandelerFragment.getTransactionData().getTrns_note());
+//                            transactionToEdit.setTrns_date(transactionHandelerFragment.getTransactionData().getTrns_date());
                             if (transactionToEdit != null) {
                                 Executors.newSingleThreadExecutor().execute(() -> {
-                                    AppDatabase.getDatabase(getContext()).performDaoAction(transactionDao, dao -> dao.update(transactionToEdit));
+                                    TransactionChainingManager.getInstance(getContext()).updateTransaction(transactionHandelerFragment.getTransactionData(),transactionToEdit);
                                 });
                             } else {
                                 Toast.makeText(getContext(), "Transaction data is null", Toast.LENGTH_SHORT).show();
@@ -160,7 +154,7 @@ public class PopupTransactionFragment extends DialogFragment {
                                 return;
                             }
                             Executors.newSingleThreadExecutor().execute(() -> {
-                                        AppDatabase.getDatabase(getContext()).performDaoAction(transactionDao, dao -> dao.insert(newTransaction));
+                                TransactionChainingManager.getInstance(getContext()).createTransaction(newTransaction);
                         });
                         }
                         // Executors.newSingleThreadExecutor().execute(() -> transactionDao.insert(newTransaction));
@@ -186,7 +180,9 @@ public class PopupTransactionFragment extends DialogFragment {
         cancelButton.setOnClickListener(v -> {
             if (transactionToEdit != null && cancelButton.getText().toString().equalsIgnoreCase("Delete")) {
                 Log.d("PopupTransactionFrag", "Deleting transaction: " + transactionToEdit);
-                Executors.newSingleThreadExecutor().execute(() -> transactionDao.delete(transactionToEdit));
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    TransactionChainingManager.getInstance(getContext()).deleteTransaction(transactionToEdit);
+                });
                 Toast.makeText(getContext(), "Transaction deleted", Toast.LENGTH_SHORT).show();
                 dismiss();
             } else {

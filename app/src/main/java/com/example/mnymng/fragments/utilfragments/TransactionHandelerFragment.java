@@ -227,6 +227,7 @@ public class TransactionHandelerFragment extends Fragment {
         // TODO: Populate relatedAccountSpinner if needed (e.g., with all accounts, excluding the main selected account)
     }
 
+
     public Transaction getTransactionData() {
         Transaction transaction = transactionToEdit == null ? new Transaction(): transactionToEdit;
         //transactionNameEditText.setText(categoryContext.getCata_name());

@@ -6,7 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mnymng.DB.enums.AccountType;
@@ -38,25 +45,96 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountsFragment extends Fragment {
-    private AccountType accountType;
+    private static AccountType accountType;
 
     private RecyclerView recyclerView;
     private GridAdapter<AccountsItem, AccountsFragment.MyListItemViewHolder> adapter;
 
-    private List<Account> currentAccounts = new ArrayList<>(); // To store loaded transactions
+    private List<Account> currentAccounts = new ArrayList<>(); // To store loaded accounts
     private AccountViewModel accountViewModel;
 
     public static class MyListItemViewHolder extends RecyclerView.ViewHolder {
         TextView originalName;
+        TextView currentBalance;
         TextView cBalance;
+        TextView remainingBalance;
+        TextView rBalanceCurrency;
         TextView rBalance;
+        ImageButton editButton; // Added edit button
+        Button payButton; // Added pay button
 
         public MyListItemViewHolder(@NonNull View itemView) {
             super(itemView);
             originalName = itemView.findViewById(R.id.originalName);
+            currentBalance = itemView.findViewById(R.id.currentBalance);
             cBalance = itemView.findViewById(R.id.cBalance);
+            remainingBalance = itemView.findViewById(R.id.remainingBalance);
+            rBalanceCurrency = itemView.findViewById(R.id.rBalanceCurrency);
             rBalance = itemView.findViewById(R.id.rBalance);
-        }
+            editButton = itemView.findViewById(R.id.editButton); // Initialize edit button
+            payButton = itemView.findViewById(R.id.payButton); // Initialize pay button
+
+            if(accountType != null) {
+                if(accountType == AccountType.BANK) {
+                    currentBalance.setText("Balance");
+                    remainingBalance.setVisibility(View.GONE);
+                    rBalanceCurrency.setVisibility(View.GONE);
+                    rBalance.setVisibility(View.GONE);
+                    payButton.setText("Transfer");
+
+            } else if (accountType == AccountType.CREDIT_CARD) {
+                    currentBalance.setText("Remaining");
+                    remainingBalance.setText("Total");;
+                    payButton.setText("Pay");
+
+                }
+            }else if (accountType == AccountType.LENDING) {
+                currentBalance.setText("Remaining");
+                remainingBalance.setText("Total");;
+                payButton.setText("Payment");
+
+            }else if (accountType == AccountType.LOAN) {
+                currentBalance.setText("Remaining");
+                remainingBalance.setText("Total");
+                payButton.setText("Pay");
+
+            }else if (accountType == AccountType.INSURANCE) {
+                currentBalance.setText("Balance");
+                remainingBalance.setVisibility(View.GONE);
+                rBalanceCurrency.setVisibility(View.GONE);
+                rBalance.setVisibility(View.GONE);
+                payButton.setText("Pay");
+
+            }else if (accountType == AccountType.INVESTMENT) {
+                currentBalance.setText("Balance");
+                remainingBalance.setVisibility(View.GONE);
+                rBalanceCurrency.setVisibility(View.GONE);
+                rBalance.setVisibility(View.GONE);
+                payButton.setText("Invest");
+
+            }else if (accountType == AccountType.E_WALLET) {
+                currentBalance.setText("Balance");
+                remainingBalance.setVisibility(View.GONE);
+                rBalanceCurrency.setVisibility(View.GONE);
+                rBalance.setVisibility(View.GONE);
+                payButton.setText("Add");
+
+            }else if (accountType == AccountType.WALLET) {
+                currentBalance.setText("Balance");
+                remainingBalance.setVisibility(View.GONE);
+                rBalanceCurrency.setVisibility(View.GONE);
+                rBalance.setVisibility(View.GONE);
+                payButton.setText("Add");
+
+            }else if (accountType == AccountType.OTHER_ASSET) {
+                currentBalance.setText("Balance");
+                remainingBalance.setVisibility(View.GONE);
+                rBalanceCurrency.setVisibility(View.GONE);
+                rBalance.setVisibility(View.GONE);
+                payButton.setText("Pay");
+
+            }
+            }
 
         @SuppressLint("SetTextI18n")
         public void bind(AccountsItem item) {
@@ -82,8 +160,9 @@ public class AccountsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common, container, false);
+        LinearLayout filterSortSection = view.findViewById(R.id.filter_sort_section);
+        filterSortSection.setVisibility(View.GONE);
 
-        // Initialize ViewModel
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 
         FloatingActionButton buttonOpenDrawer = view.findViewById(R.id.fab_add);
@@ -93,21 +172,46 @@ public class AccountsFragment extends Fragment {
             bundle.putSerializable("accountAddCall", (Serializable) accountType);
             popupAccountFragment.setArguments(bundle);
             popupAccountFragment.show(getParentFragmentManager(), "PopupAccountFragmentTag");
-//            BottomDrawer bottomDrawerFragment = new BottomDrawer();
-//            CataListFragment.screenName = accountType;
-//            bottomDrawerFragment.show(getParentFragmentManager(), bottomDrawerFragment.getTag());
         });
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
-        // Create the ViewHolderFactory
         GridAdapter.ViewHolderFactory<AccountsFragment.MyListItemViewHolder> factory = itemView -> new AccountsFragment.MyListItemViewHolder(itemView);
 
-        // Create the ViewHolderBinder
-        GridAdapter.ViewHolderBinder<AccountsItem, AccountsFragment.MyListItemViewHolder> binder = (holder, item) -> holder.bind(item);
+        GridAdapter.ViewHolderBinder<AccountsItem, AccountsFragment.MyListItemViewHolder> binder = (holder, item) -> {
+            holder.bind(item);
+            // Set OnClickListener for the edit button
+            holder.editButton.setOnClickListener(v -> {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < currentAccounts.size()) {
+                    Account selectedAccount = currentAccounts.get(position);
+                    PopupAccountFragment popupAccountFragment = new PopupAccountFragment();
+                    Bundle bundle = new Bundle();
+                    // Ensure Account class implements Serializable
+                    bundle.putSerializable("accountToEdit", (Serializable) selectedAccount);
+                    popupAccountFragment.setArguments(bundle);
+                    popupAccountFragment.show(getParentFragmentManager(), "PopupAccountFragment_EditTag");
+                }
+            });
 
-        // Create the adapter
+            // Set OnClickListener for the pay button
+            holder.payButton.setOnClickListener(v -> {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && position < currentAccounts.size()) {
+                    Account selectedAccount = currentAccounts.get(position);
+                    // Add your payment functionality here
+                    Log.d("AccountsFragment", "Pay button clicked for account: " + selectedAccount.getAccount_name());
+                    // Example: navigate to a payment screen or show a payment dialog
+                    // PopupTransactionFragment popupTransactionFragment = new PopupTransactionFragment();
+                    // Bundle bundle = new Bundle();
+                    // bundle.putSerializable("accountToPayFrom", (Serializable) selectedAccount);
+                    // popupTransactionFragment.setArguments(bundle);
+                    // popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragment_PayTag");
+                }
+            });
+        };
+
         adapter = new GridAdapter<>(
                 getContext(),
                 new ArrayList<>(),
@@ -116,49 +220,68 @@ public class AccountsFragment extends Fragment {
                 binder
         );
 
+        // This existing item click listener is for the whole card view.
+        // If you only want the edit button to be clickable, you might remove or adjust this.
         adapter.setOnItemClickListener((item, position) -> {
-            Log.d("Fragment", "Clicked: " + item.toString() + " at position " + position);
-            // Handle item clicks here
-            if (position < currentAccounts.size()) {
-                //ListItem clickedItem = dataList.get(position);
-                // Do something with the clicked item
-                Account selectedTransaction = (Account) currentAccounts.get(position); // Cast to Transaction
+            Log.d("Fragment", "Card clicked: " + item.toString() + " at position " + position);
+            // Example: if (position < currentAccounts.size()) { Account selectedAccount = currentAccounts.get(position); /* handle card click */ }
+            if (position != RecyclerView.NO_POSITION && position < currentAccounts.size()) {
+                Account selectedAccount = currentAccounts.get(position);
+                // Replace the current fragment with TransactionTypeFragment
+                //FragmentManager fragmentManager = getParentFragmentManager();
+                //FragmentManager activityFragmentManager = requireActivity().getSupportFragmentManager();
 
-//                PopupTransactionFragment popupTransactionFragment = new PopupTransactionFragment();
-//                Bundle bundle = new Bundle();
-//                // Make sure your Category class implements Serializable or Parcelable
-//                // Ensure PopupTransactionFragment expects "transactionAddCall" or adjust as needed
-//                bundle.putSerializable("transactionToEdit", (Serializable) selectedTransaction);
-//                popupTransactionFragment.setArguments(bundle);
-//                popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragmentTag");
+                TransactionTypeFragment transactionTypeFragment = new TransactionTypeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("selectedAccount", selectedAccount);
+                // Optional: Pass a CategoryType if clicking an account card should
+                // default to a specific transaction type view (e.g., all transactions, or expenses).
+                // If TransactionTypeFragment should show all transactions for the account
+                // when no CategoryType is passed, you can omit this.
+                // bundle.putSerializable("transactionType", CategoryType.EXPENSE); // Example
+                transactionTypeFragment.setArguments(bundle);
+
+
+                //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                // ** IMPORTANT: Replace R.id.your_fragment_container_id with the actual ID of the FrameLayout in your activity **
+//                activityFragmentManager.beginTransaction().replace(R.id.fragment_common, transactionTypeFragment)
+//                .addToBackStack(null) // Optional: if you want back navigation to return here
+//                .commit();
+                NavController navController =
+                        NavHostFragment.findNavController(AccountsFragment.this);
+                navController.navigate(
+                        R.id.action_accountsFragment_to_accountTransactionFragment,
+                        bundle
+                );
+            } else {
+                Log.e("AccountsFragment", "Invalid position or currentAccounts list out of sync on item click.");
             }
+
         });
 
         recyclerView.setAdapter(adapter);
 
-        // Load initial transactions
-        loadTransactionsByCategoryType(accountType);
+        loadAccountsByType(accountType); // Renamed from loadTransactionsByCategoryType for clarity
 
         return view;
     }
 
-    private void loadTransactionsByCategoryType(AccountType accountType) {
+    // Renamed from loadTransactionsByCategoryType
+    private void loadAccountsByType(AccountType accountType) {
         accountViewModel.getAccountsByType(accountType).observe(getViewLifecycleOwner(), accounts -> {
             List<AccountsItem> dataList = new ArrayList<>();
-            currentAccounts.clear(); // Clear previous transactions
+            currentAccounts.clear();
             if (accounts != null) {
-                currentAccounts.addAll(accounts); // Store fetched transactions
+                currentAccounts.addAll(accounts);
                 for (Account account : accounts) {
-                    // TODO: Adjust these getters to match your Transaction model
-                    // And ensure your ListItem constructor matches this usage
-                    String name = account.getAccount_name(); // Or transaction.getName() or similar
+                    String name = account.getAccount_name();
                     Double cBalance = account.getAccount_current_balance();
-                    Double rBalance = account.getAccount_opening_balance(); // Or derive from transaction
-
-                    dataList.add(new AccountsItem(name, cBalance, cBalance));
-                    adapter.updateData(dataList);
+                    // Assuming AccountsItem constructor expects name, current balance, and opening balance (or similar)
+                    // The third parameter was cBalance again, which might be a placeholder.
+                    // If rBalance is opening_balance, use account.getAccount_opening_balance()
+                    dataList.add(new AccountsItem(name, cBalance, account.getAccount_opening_balance() != 0 ? account.getAccount_opening_balance() : 0.0));
                 }
-                //adapter.notifyDataSetChanged();
+                adapter.updateData(dataList); // Update adapter with new list
             }
         });
     }

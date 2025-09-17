@@ -17,6 +17,7 @@ public class BottomDrawer extends BottomSheetDialogFragment {
     private int currentIndex = 0;
     private Fragment[] fragments = {new CataListFragment(), new CataListFragment(), new CataListFragment()};
 
+
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,

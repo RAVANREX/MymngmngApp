@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,6 +167,32 @@ public class HomeWindow extends AppCompatActivity {
                 onBackPressedCallback.setEnabled(false);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.home_overflow_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_notification) {
+            Toast.makeText(this, "Notification clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (itemId == R.id.action_profile) {
+            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (itemId == R.id.action_settings) {
+            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (itemId == R.id.action_about_us) {
+            Toast.makeText(this, "About Us clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

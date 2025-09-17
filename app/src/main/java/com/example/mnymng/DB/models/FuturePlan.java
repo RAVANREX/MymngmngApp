@@ -32,10 +32,10 @@ public class FuturePlan implements Serializable {
     @ColumnInfo(name = "fplan_name")
     public String fplan_name;
 
-    @ColumnInfo(name = "account_id")
+    @ColumnInfo(name = "account_id", index = true)
     public long account_id;
 
-    @ColumnInfo(name = "cata_id")
+    @ColumnInfo(name = "cata_id", index = true)
     public Long cata_id; // Allow NULL
 
     @ColumnInfo(name = "fplan_etamount")
