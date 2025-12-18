@@ -22,6 +22,7 @@ import com.example.mnymng.DB.dao.CategoryDao;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter;
 import com.example.mnymng.DB.models.Category;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.Serializable;
 import java.util.concurrent.Executors;
@@ -65,9 +66,13 @@ public class PopupViewFragment extends DialogFragment {
 
         Button nextButton = view.findViewById(R.id.nextButton);
         Button cancelButton = view.findViewById(R.id.cancelButton);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         if (categoryToEdit != null) {
             Log.d("PopupViewFragment", "Editing category: " + categoryToEdit.getCata_name());
+            toolbar.setTitle("Edit Category");
+        }else{
+            toolbar.setTitle("Add Category");
         }
 
         nextButton.setOnClickListener(v -> {

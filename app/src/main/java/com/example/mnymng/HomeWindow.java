@@ -1,15 +1,14 @@
+
 package com.example.mnymng;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -18,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -38,6 +38,7 @@ public class HomeWindow extends AppCompatActivity {
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_home);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -46,9 +47,7 @@ public class HomeWindow extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.app_name);
         }
 
-
-
-        drawerLayout = findViewById(R.id.activity_home); // Assuming R.id.fragment_home is your DrawerLayout in fragment_home.xml
+        drawerLayout = findViewById(R.id.activity_home);
 
         NavigationView navView = findViewById(R.id.nav_view);
          DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -63,11 +62,7 @@ public class HomeWindow extends AppCompatActivity {
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
 
-            // Assuming R.id.fragment_home is a top-level destination if it's also the drawer ID.
-            // Or, it might be a different ID if fragment_home is a layout for a specific screen
-            // that is part of the navigation graph.
             appBarConfiguration = new AppBarConfiguration.Builder(
-                    /* Assuming these are top-level destinations */
                     R.id.fragment_dashboard, R.id.fragment_expense,
                     R.id.fragment_income,
                    R.id.fragment_trip)
@@ -76,66 +71,6 @@ public class HomeWindow extends AppCompatActivity {
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(navView, navController);
-
-//            Menu menu = navView.getMenu();
-//            menu.findItem(R.id.fragment_bank).setVisible(false);
-//            menu.findItem(R.id.fragment_wallet).setVisible(false);
-//            menu.findItem(R.id.fragment_loan).setVisible(false);
-//            menu.findItem(R.id.fragment_lending).setVisible(false);
-//            menu.findItem(R.id.fragment_credit_card).setVisible(false);
-//            menu.findItem(R.id.fragment_investment).setVisible(false);
-//            menu.findItem(R.id.fragment_e_wallet).setVisible(false);
-//            menu.findItem(R.id.fragment_asset).setVisible(false);
-
-
-
-
-
-//
-//            navView.setNavigationItemSelectedListener(item -> {
-//               // menu.findItem(R.id.accounts_group).setChecked(true);
-//                // Handle navigation view item clicks here.
-//                int id = item.getItemId();
-//
-//                // Example: Navigate to a destination or perform an action
-//                 if (id == R.id.accounts_group) {
-//                     Log.d("NavDrawer", "onCreate: "+id+"acc"+R.id.accounts_group);
-//                     if(menu.findItem(R.id.fragment_bank).isVisible()){
-//                         menu.findItem(R.id.fragment_bank).setVisible(false);
-//                         menu.findItem(R.id.fragment_wallet).setVisible(false);
-//                         menu.findItem(R.id.fragment_loan).setVisible(false);
-//                         menu.findItem(R.id.fragment_lending).setVisible(false);
-//                         menu.findItem(R.id.fragment_credit_card).setVisible(false);
-//                         menu.findItem(R.id.fragment_investment).setVisible(false);
-//                         menu.findItem(R.id.fragment_e_wallet).setVisible(false);
-//                         menu.findItem(R.id.fragment_asset).setVisible(false);
-//                     }else {
-//                         menu.findItem(R.id.fragment_bank).setVisible(true);
-//                         menu.findItem(R.id.fragment_wallet).setVisible(true);
-//                         menu.findItem(R.id.fragment_loan).setVisible(true);
-//                         menu.findItem(R.id.fragment_lending).setVisible(true);
-//                         menu.findItem(R.id.fragment_credit_card).setVisible(true);
-//                         menu.findItem(R.id.fragment_investment).setVisible(true);
-//                         menu.findItem(R.id.fragment_e_wallet).setVisible(true);
-//                         menu.findItem(R.id.fragment_asset).setVisible(true);
-//                     }
-//
-//                 }
-//                 // else if (id == R.id.another_menu_item_id) {
-//                //     // Do something else
-//                //     Toast.makeText(HomeWindow.this, "Another item clicked", Toast.LENGTH_SHORT).show();
-//                // }
-//
-//                // Close the navigation drawer
-//                //drawerLayout.closeDrawer(GravityCompat.START);
-//                // Return true to display the item as the selected item
-//                // Return false if you don't want to select the item
-//                // If you are using NavigationUI.setupWithNavController,
-//                // it usually handles the navigation and selection state.
-//                // So, you might want to call it or let it handle the event.
-//                // For custom handling, you can return true after handling the navigation.
-//                return NavigationUI.onNavDestinationSelected(item, navController) || HomeWindow.super.onOptionsItemSelected(item);
-//            });
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activity_home), (v, insets) -> {
@@ -144,14 +79,12 @@ public class HomeWindow extends AppCompatActivity {
             return insets;
         });
 
-        // Setup OnBackPressedDispatcher
-        onBackPressedCallback = new OnBackPressedCallback(false /* initially disabled */) {
+        onBackPressedCallback = new OnBackPressedCallback(false) {
             @Override
             public void handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
-                // The callback will be disabled by the drawer listener when the drawer closes.
             }
         };
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
@@ -178,18 +111,7 @@ public class HomeWindow extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.action_notification) {
-            Toast.makeText(this, "Notification clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.action_profile) {
-            Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.action_settings) {
-            Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (itemId == R.id.action_about_us) {
-            Toast.makeText(this, "About Us clicked", Toast.LENGTH_SHORT).show();
+        if (navController != null && NavigationUI.onNavDestinationSelected(item, navController)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -197,7 +119,7 @@ public class HomeWindow extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        return navController != null && appBarConfiguration != null && NavigationUI.navigateUp(navController, appBarConfiguration)
+        return (navController != null && appBarConfiguration != null && NavigationUI.navigateUp(navController, appBarConfiguration))
                 || super.onSupportNavigateUp();
     }
 }

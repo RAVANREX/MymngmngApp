@@ -63,6 +63,9 @@ public class AccountsFragment extends Fragment {
         ImageButton editButton; // Added edit button
         Button payButton; // Added pay button
 
+        //TextView totalAmount;
+
+
         public MyListItemViewHolder(@NonNull View itemView) {
             super(itemView);
             originalName = itemView.findViewById(R.id.originalName);
@@ -73,6 +76,9 @@ public class AccountsFragment extends Fragment {
             rBalance = itemView.findViewById(R.id.rBalance);
             editButton = itemView.findViewById(R.id.editButton); // Initialize edit button
             payButton = itemView.findViewById(R.id.payButton); // Initialize pay button
+
+            //totalAmount = itemView.findViewById(R.id.totalAmount);
+
 
             if(accountType != null) {
                 if(accountType == AccountType.BANK) {
@@ -162,6 +168,8 @@ public class AccountsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_common, container, false);
         LinearLayout filterSortSection = view.findViewById(R.id.filter_sort_section);
         filterSortSection.setVisibility(View.GONE);
+        LinearLayout headerTotalSection = view.findViewById(R.id.header_total_section);
+        headerTotalSection.setVisibility(View.GONE);
 
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 

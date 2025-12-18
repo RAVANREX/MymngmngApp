@@ -173,5 +173,28 @@
 
     <!-- Added for Accounts submenu -->
 
+    <fragment
+        android:id="@+id/action_notification"
+        android:name="com.example.mnymng.fragments.NotificationFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/action_profile"
+        android:name="com.example.mnymng.fragments.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/action_settings"
+        android:name="com.example.mnymng.fragments.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/action_about_us"
+        android:name="com.example.mnymng.fragments.AboutUsFragment"
+        android:label="About Us"
+        tools:layout="@layout/fragment_about_us" />
 
 </navigation>

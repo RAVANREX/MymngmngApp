@@ -41,6 +41,7 @@ dependencies {
     implementation libs.room.common.jvm
     implementation libs.room.runtime
     implementation libs.core
+    implementation libs.mpandroidchart
     testImplementation libs.junit
     // ✅ Add this for Robolectric
     testImplementation "org.robolectric:robolectric:4.10"

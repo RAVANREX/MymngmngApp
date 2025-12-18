@@ -12,6 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.mnymng.DB.dao.AccountDao;
 import com.example.mnymng.DB.dao.CategoryDao;
 import com.example.mnymng.DB.dao.FuturePlanDao;
+import com.example.mnymng.DB.dao.NotificationDao;
 import com.example.mnymng.DB.dao.RecurringDao;
 import com.example.mnymng.DB.dao.TransactionDao;
 import com.example.mnymng.DB.dao.TransactionSummaryDao;
@@ -22,6 +23,7 @@ import com.example.mnymng.DB.enums.TransactionType;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.DB.models.Category;
 import com.example.mnymng.DB.models.FuturePlan;
+import com.example.mnymng.DB.models.Notification;
 import com.example.mnymng.DB.models.Recurring;
 import com.example.mnymng.DB.models.Transaction;
 import com.example.mnymng.DB.models.TransactionSummary;
@@ -29,15 +31,18 @@ import com.example.mnymng.DB.utils.DateConverter;
 import com.example.mnymng.DB.utils.EnumConverters;
 
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@Database(entities = {Account.class, Category.class, Transaction.class, TransactionSummary.class, Recurring.class, FuturePlan.class},
-        version = 1, exportSchema = false)
+@Database(entities = {Account.class, Category.class, Transaction.class, TransactionSummary.class, Recurring.class, FuturePlan.class, Notification.class},
+        version = 2, exportSchema = false)
 @TypeConverters({DateConverter.class, EnumConverters.class})
 public abstract class AppDatabase extends RoomDatabase {
+
+    public static ExecutorService databaseWriteExecutor;
 
     public abstract AccountDao accountDao();
     public abstract CategoryDao categoryDao();
@@ -45,6 +50,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TransactionSummaryDao transactionSummaryDao();
     public abstract RecurringDao recurringDao();
     public abstract FuturePlanDao futurePlanDao();
+    public abstract NotificationDao notificationDao();
 
     private static volatile AppDatabase INSTANCE;
 
@@ -55,6 +61,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "money_management_db")
                             .addCallback(sRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -80,6 +87,11 @@ public abstract class AppDatabase extends RoomDatabase {
                 TransactionDao transactionDao = INSTANCE.transactionDao();
                 RecurringDao recurringDao = INSTANCE.recurringDao();
                 FuturePlanDao futurePlanDao = INSTANCE.futurePlanDao();
+                NotificationDao notificationDao = INSTANCE.notificationDao();
+
+                // Add sample notifications
+                notificationDao.insert(new Notification("Welcome to application", "Your financial journey starts now.", new Date(), false));
+                notificationDao.insert(new Notification("Pro Tip", "Create a budget to stay on top of your spending.", new Date(System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1)), true));
 
                 // Original Income Categories (IDs: 1-5 assumed)
                categoryDao.insert(new Category( "Salary", CategoryType.INCOME, "🏠", "Monthly regular salary",null,null,null,null,null));

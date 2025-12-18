@@ -64,24 +64,28 @@ public class TransactionTypeFragment extends Fragment {
     private Calendar endDateCalendar;
 
     // Constants for spinner options (mirroring strings.xml)
-    private static final String FILTER_NONE = "None";
+    //private static final String FILTER_NONE = "None";
     private static final String FILTER_THIS_MONTH = "This Month";
     private static final String FILTER_LAST_MONTH = "Last Month";
     private static final String FILTER_THIS_YEAR = "This Year";
     private static final String FILTER_LAST_YEAR = "Last Year";
     private static final String FILTER_CUSTOM_DATE_RANGE = "Custom Date Range...";
 
-    private static final String SORT_NONE = "None";
+    //private static final String SORT_NONE = "None";
     private static final String SORT_TIME_NEWEST_FIRST = "Time (Newest First)";
     private static final String SORT_TIME_OLDEST_FIRST = "Time (Oldest First)";
     private static final String SORT_AMOUNT_HIGH_TO_LOW = "Amount (High to Low)";
     private static final String SORT_AMOUNT_LOW_TO_HIGH = "Amount (Low to High)";
+     TextView totalAmountText;
+     TextView moneySign;
+
 
 
     public static class MyListItemViewHolder extends RecyclerView.ViewHolder {
         TextView itemName;
         TextView itemValue;
         TextView currency;
+
 
         public MyListItemViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,12 +150,16 @@ public class TransactionTypeFragment extends Fragment {
 
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common, container, false);
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         FloatingActionButton buttonOpenDrawer = view.findViewById(R.id.fab_add);
+        totalAmountText = view.findViewById(R.id.total_amount);
+        moneySign = view.findViewById(R.id.money_sign);
+        moneySign.setText(Currency.INR.getSymbol());
         if (categoryType != null) {
             if(currentAccount == null) {
                 buttonOpenDrawer.setOnClickListener(v -> {
@@ -194,7 +202,7 @@ public class TransactionTypeFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                currentFilterOption = FILTER_NONE;
+                currentFilterOption = FILTER_THIS_MONTH;
                 startDateCalendar = null;
                 endDateCalendar = null;
                 applyFiltersAndSort();
@@ -210,7 +218,7 @@ public class TransactionTypeFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                currentSortOption = SORT_NONE;
+                currentSortOption = SORT_TIME_NEWEST_FIRST;
                 applyFiltersAndSort();
             }
         });
@@ -278,7 +286,7 @@ public class TransactionTypeFragment extends Fragment {
                         endDateCalendar = null; // or reset to start date
                         // Optionally re-prompt for end date or reset filter selection
                         spinnerFilter.setSelection(0); // Reset to "None" or previous valid selection
-                        currentFilterOption = FILTER_NONE;
+                        currentFilterOption = FILTER_THIS_MONTH;
                     }
                     applyFiltersAndSort();
                 }, year, month, day);
@@ -358,17 +366,14 @@ public class TransactionTypeFragment extends Fragment {
             Date endDate = endDateCalendar.getTime();
             filteredList = filteredList.stream().filter(t -> {
                 if (t.getTrns_date() == null) return false;
-                // Ensure transaction date is not before start date AND not after end date
+
                 return !t.getTrns_date().before(startDate) && !t.getTrns_date().after(endDate);
             }).collect(Collectors.toList());
         }
-        // TODO: Add categoryId filtering here if needed, similar to date filters.
-        // Example: if (selectedCategoryId != null) {
-        // filteredList = filteredList.stream().filter(t -> t.getCata_id().equals(selectedCategoryId)).collect(Collectors.toList());
-        // }
 
 
-        // Apply Sorting
+
+
         if (SORT_TIME_NEWEST_FIRST.equals(currentSortOption)) {
             Collections.sort(filteredList, (t1, t2) -> {
                 if (t1.getTrns_date() == null && t2.getTrns_date() == null) return 0;
@@ -394,17 +399,21 @@ public class TransactionTypeFragment extends Fragment {
         displayedTransactions.addAll(filteredList);
 
         List<ListItem> dataList = new ArrayList<>();
+        Double totalAmount = 0.00;
         for (Transaction transaction : displayedTransactions) {
             String name = transaction.getTrns_name();
             Double value = transaction.getTrns_amount();
             String category = transaction.getCata_id() != null ? transaction.getCata_id().toString() : "N/A";
             String date = "";
             if (transaction.getTrns_date() != null) {
-                // TODO: Consider using SimpleDateFormat for better date string representation
                 date = transaction.getTrns_date().toString();
             }
+            totalAmount=totalAmount+value;
             dataList.add(new ListItem(name, value, Currency.INR.getSymbol(), category, date));
+
         }
+        totalAmountText.setText(totalAmount.toString());
         adapter.updateData(dataList);
     }
+
 }

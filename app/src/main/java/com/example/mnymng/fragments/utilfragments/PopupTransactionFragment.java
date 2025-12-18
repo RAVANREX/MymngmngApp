@@ -23,6 +23,7 @@ import com.example.mnymng.DB.models.Transaction;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter;
 import com.example.mnymng.DB.models.Category;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.io.Serializable;
 import java.util.concurrent.Executors;
@@ -90,9 +91,13 @@ public class PopupTransactionFragment extends DialogFragment {
 
         Button nextButton = view.findViewById(R.id.nextButton);
         Button cancelButton = view.findViewById(R.id.cancelButton);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         if (transactionToEdit != null) {
             Log.d("PopupTransactionFrag", "Editing transaction: " + transactionToEdit);
+            toolbar.setTitle("Edit Transaction");
+        }else{
+            toolbar.setTitle("Add Transaction");
         }
 
         nextButton.setOnClickListener(v -> {

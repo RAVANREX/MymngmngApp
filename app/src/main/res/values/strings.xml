@@ -46,7 +46,6 @@
     <string name="filter_by_label">Filter by:</string>
     <string name="sort_by_label">Sort by:</string>
     <string-array name="filter_options">
-        <item>None</item>
         <item>This Month</item>
         <item>Last Month</item>
         <item>This Year</item>
@@ -55,7 +54,6 @@
     </string-array>
 
     <string-array name="sort_options">
-        <item>None</item>
         <item>Time (Newest First)</item>
         <item>Time (Oldest First)</item>
         <item>Amount (High to Low)</item>

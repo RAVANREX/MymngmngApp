@@ -161,6 +161,7 @@ public class TransactionHandelerFragment extends Fragment {
             datePickerDialog.show();
         });
 
+
         // Populate accountTypeSpinner
         ArrayAdapter<AccountType> accountTypeAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, AccountType.values());
         accountTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

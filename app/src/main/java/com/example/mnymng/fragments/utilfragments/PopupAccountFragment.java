@@ -23,6 +23,7 @@ import com.example.mnymng.DB.logic.TransactionChainingManager;
 import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter; // This adapter might need to be changed or made generic
+import com.google.android.material.appbar.MaterialToolbar;
 // import com.example.mnymng.DB.models.Category; // Category might not be relevant for Account
 
 import java.io.Serializable;
@@ -87,9 +88,13 @@ public class PopupAccountFragment extends DialogFragment {
 
         Button nextButton = view.findViewById(R.id.nextButton);
         Button cancelButton = view.findViewById(R.id.cancelButton);
+        MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
 
         if (accountToEdit != null) {
             Log.d("PopupAccountFrag", "Editing account: " + accountToEdit);
+            toolbar.setTitle("Edit Account");
+        }else{
+            toolbar.setTitle("Add Account");
         }
 
         nextButton.setOnClickListener(v -> {
