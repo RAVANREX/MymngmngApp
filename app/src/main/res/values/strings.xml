@@ -60,6 +60,7 @@
         <item>Amount (Low to High)</item>
     </string-array>
 
-
+    <!-- IMPORTANT: Replace "YOUR_WEB_CLIENT_ID" with your actual Web Client ID from the Google API Console -->
+    <string name="default_web_client_id" translatable="false">YOUR_WEB_CLIENT_ID</string>
 
 </resources>

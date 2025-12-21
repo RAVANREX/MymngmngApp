@@ -89,7 +89,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 FuturePlanDao futurePlanDao = INSTANCE.futurePlanDao();
                 NotificationDao notificationDao = INSTANCE.notificationDao();
 
-                // Add sample notifications
+//                // Add sample notifications
                 notificationDao.insert(new Notification("Welcome to application", "Your financial journey starts now.", new Date(), false));
                 notificationDao.insert(new Notification("Pro Tip", "Create a budget to stay on top of your spending.", new Date(System.currentTimeMillis() - TimeUnit.HOURS.toMillis(1)), true));
 

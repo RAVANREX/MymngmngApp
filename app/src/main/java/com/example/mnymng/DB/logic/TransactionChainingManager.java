@@ -201,7 +201,7 @@ public class TransactionChainingManager {
         if (type == TransactionType.CREDIT) {
             newBalance = currentBalance + transactionAmount;
         } else if (type == TransactionType.DEBIT) {
-            newBalance = currentBalance - transactionAmount;
+            newBalance = currentBalance + transactionAmount;
         } else {
             System.err.println("TransactionChainingManager: Unsupported transaction type for simple balance update: " + type);
             return;

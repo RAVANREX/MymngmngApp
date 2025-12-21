@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button buttonOpenDrawer;
+    //private Button buttonOpenDrawer;
     private ProgressBar loadingSpinner;
 
     @Override
@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        buttonOpenDrawer = findViewById(R.id.gp_to_home_button);
+        //buttonOpenDrawer = findViewById(R.id.gp_to_home_button);
         loadingSpinner = findViewById(R.id.loading_spinner);
 
         // Disable button and show spinner
-        buttonOpenDrawer.setEnabled(false);
+        //buttonOpenDrawer.setEnabled(false);
         loadingSpinner.setVisibility(View.VISIBLE);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
             // UI Thread work
             handler.post(() -> {
                 // Enable button and hide spinner
-                buttonOpenDrawer.setEnabled(true);
+                //buttonOpenDrawer.setEnabled(true);
                 loadingSpinner.setVisibility(View.GONE);
 
-                buttonOpenDrawer.setOnClickListener(v -> {
+                //buttonOpenDrawer.setOnClickListener(v -> {
                     Intent intent = new Intent(MainActivity.this, HomeWindow.class);
                     startActivity(intent);
-                });
+                //});
             });
         });
     }

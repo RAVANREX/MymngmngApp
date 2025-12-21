@@ -37,7 +37,6 @@ public class DashboardFragment extends Fragment {
         barChart = view.findViewById(R.id.bar_chart);
         tvIncome = view.findViewById(R.id.tv_income);
         tvExpense = view.findViewById(R.id.tv_expense);
-        tvSaving = view.findViewById(R.id.tv_saving);
         toggleGroup = view.findViewById(R.id.toggle_group);
 
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -99,13 +98,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        mViewModel.getSavings().observe(getViewLifecycleOwner(), saving -> {
-            if (saving != null) {
-                tvSaving.setText(String.format("₹%.2f", saving));
-            } else {
-                tvSaving.setText("₹0.00");
-            }
-        });
+
 
         mViewModel.getSpendingAnalysis().observe(getViewLifecycleOwner(), spendingData -> {
             if (spendingData != null && !spendingData.isEmpty()) {

@@ -113,6 +113,7 @@ public class AccountHandlerFragment extends Fragment {
         try {
             double openingBalance = Double.parseDouble(openingBalanceStr);
             account.setAccount_opening_balance(openingBalance); // Assuming setOpeningBalance(double) exists
+            account.setAccount_current_balance(openingBalance); // Assuming setCurrentBalance(double) exists
         } catch (NumberFormatException e) {
             accountOpeningBalanceEditText.setError("Invalid opening balance.");
             Toast.makeText(getContext(), "Invalid opening balance.", Toast.LENGTH_SHORT).show();
