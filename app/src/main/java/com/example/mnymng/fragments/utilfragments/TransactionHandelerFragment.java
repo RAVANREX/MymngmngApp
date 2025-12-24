@@ -20,10 +20,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.mnymng.DB.AppDatabase;
+import com.example.mnymng.DB.dao.NotificationDao;
 import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.enums.CategoryType;
 import com.example.mnymng.DB.models.Account; // Assuming Account entity path
 import com.example.mnymng.DB.models.Category; // Assuming Category entity path
+import com.example.mnymng.DB.models.Notification;
 import com.example.mnymng.DB.models.Transaction; // Assuming Transaction entity path
 import com.example.mnymng.DB.enums.TransactionType;
 import com.example.mnymng.R;
@@ -38,6 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class TransactionHandelerFragment extends Fragment {
@@ -68,6 +72,8 @@ public class TransactionHandelerFragment extends Fragment {
     private List<Account> currentAccountsList = new ArrayList<>();
     private List<Category> currentCategoriesList = new ArrayList<>(); // Assuming you'll populate this
     // private List<Account> currentRelatedAccountsList = new ArrayList<>(); // For relatedAccountSpinner
+    private Account accountToPayFrom;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,6 +93,12 @@ public class TransactionHandelerFragment extends Fragment {
             }
         }
 
+        PopupTransactionFragment popupTransactionFragment = (PopupTransactionFragment) getParentFragment();
+
+// Now you can access public variables and methods of PopupTransactionFragment
+        if (popupTransactionFragment != null) {
+            accountToPayFrom = popupTransactionFragment.accountToPayFrom;
+        }
 
     }
 
@@ -172,31 +184,66 @@ public class TransactionHandelerFragment extends Fragment {
         accountSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountSpinner.setAdapter(accountSpinnerAdapter);
 
-        accountTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
-                AccountType selectedAccountType = (AccountType) parent.getItemAtPosition(position);
-                if (selectedAccountType != null && transactionViewModel != null) {
-                    transactionViewModel.getAccountsByType(selectedAccountType).observe(getViewLifecycleOwner(), accounts -> {
-                        if (accounts != null) {
-                            currentAccountsList.clear();
-                            currentAccountsList.addAll(accounts);
-                            List<String> accountNames = accounts.stream().map(Account::getAccount_name).collect(Collectors.toList());
-                            accountSpinnerAdapter.clear();
-                            accountSpinnerAdapter.addAll(accountNames);
-                            accountSpinnerAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
+        if (accountToPayFrom != null) {
+            AccountType type = accountToPayFrom.getAccount_type();
+            if (type != null) {
+                int accountTypePosition = accountTypeAdapter.getPosition(type);
+                accountTypeSpinner.setSelection(accountTypePosition);
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                currentAccountsList.clear();
-                accountSpinnerAdapter.clear();
-                accountSpinnerAdapter.notifyDataSetChanged();
-            }
-        });
+            accountSpinnerAdapter.clear();
+            accountSpinnerAdapter.add(accountToPayFrom.getAccount_name());
+            accountSpinnerAdapter.notifyDataSetChanged();
+            accountSpinner.setSelection(0);
+
+            currentAccountsList.clear();
+            currentAccountsList.add(accountToPayFrom);
+
+            accountTypeSpinner.setEnabled(false);
+            accountSpinner.setEnabled(false);
+        } else {
+            accountTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
+                    AccountType selectedAccountType = (AccountType) parent.getItemAtPosition(position);
+                    if (selectedAccountType != null && transactionViewModel != null) {
+                        transactionViewModel.getAccountsByType(selectedAccountType).observe(getViewLifecycleOwner(), accounts -> {
+                            if (accounts != null && !accounts.isEmpty()) {
+                                currentAccountsList.clear();
+                                currentAccountsList.addAll(accounts);
+                                List<String> accountNames = accounts.stream().map(Account::getAccount_name).collect(Collectors.toList());
+                                accountSpinnerAdapter.clear();
+                                accountSpinnerAdapter.addAll(accountNames);
+                                accountSpinnerAdapter.notifyDataSetChanged();
+                            } else {
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    NotificationDao notificationDao = AppDatabase.getDatabase(getContext()).notificationDao();
+                                    notificationDao.insert(new Notification("No Account Found", "No Account Found for selected type", new Date(), false));
+
+                                });
+//                                AppDatabase.databaseWriteExecutor.execute(() -> {
+//                                    NotificationDao notificationDao = AppDatabase.getDatabase(getContext()).notificationDao();
+//                                    notificationDao.insert(new Notification("No Account Found", "No Account Found for selected type", new Date(), false));
+//                                });
+                                Toast.makeText(getContext(), "No Account Found", Toast.LENGTH_SHORT).show();
+
+                                // dismiss transaction popup
+                                if (getParentFragment() instanceof PopupTransactionFragment) {
+                                    ((PopupTransactionFragment) getParentFragment()).dismiss();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    currentAccountsList.clear();
+                    accountSpinnerAdapter.clear();
+                    accountSpinnerAdapter.notifyDataSetChanged();
+                }
+            });
+        }
 
         // Populate transactionTypeSpinner (Example: needs TransactionType enum)
 //        if (transactionTypeSpinner != null) {
@@ -247,39 +294,74 @@ public class TransactionHandelerFragment extends Fragment {
 
             // Transaction Catagori ID
             //transaction.setTrns_name(categoryContext.getCata_name());
-            if (categoryContext != null && categoryContext.getCata_id() != 0) {
-                transaction.setCata_id(categoryContext.getCata_id());
-            } else {
-                Toast.makeText(getContext(), "Catagori ID is required.", Toast.LENGTH_SHORT).show();
-                return null; // Or handle error appropriately
+            if(accountToPayFrom == null) {
+                if (categoryContext != null && categoryContext.getCata_id() != 0) {
+                    transaction.setCata_id(categoryContext.getCata_id());
+                } else {
+                    Toast.makeText(getContext(), "Catagori ID is required.", Toast.LENGTH_SHORT).show();
+                    return null; // Or handle error appropriately
+                }
+
+
+                // Transaction Type
+                //transaction.setTrns_name(categoryContext.getCata_name());
+                if (categoryContext != null && categoryContext.getCata_type() != null) {
+                    if (categoryContext.getCata_type().equals(CategoryType.INCOME))
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                    else if (categoryContext.getCata_type().equals(CategoryType.EXPENSE))
+                        transaction.setTrns_type(TransactionType.DEBIT);
+                } else {
+                    Toast.makeText(getContext(), "Transaction Type is required.", Toast.LENGTH_SHORT).show();
+                    return null; // Or handle error appropriately
+                }
+
+
+                // Transaction Name
+                if (categoryContext != null && categoryContext.getCata_name() != null) {
+                    transaction.setTrns_name(categoryContext.getCata_name());
+                } else {
+                    //transactionNameEditText.setText("Ullla");
+                    Toast.makeText(getContext(), "Transaction name is required.", Toast.LENGTH_SHORT).show();
+                    return null; // Or handle error appropriately
+                }
+
             }
+            else{
+                transaction.setTrns_name(accountToPayFrom.getAccount_name());
+                switch (accountToPayFrom.getAccount_type()) {
+                    case BANK:
 
+                        break;
+                    case WALLET:
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                        break;
+                    case LOAN:
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                        break;
+                    case LENDING:
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                        break;
+                    case CREDIT_CARD:
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                        break;
+                    case INSURANCE:
 
-            // Transaction Type
-            //transaction.setTrns_name(categoryContext.getCata_name());
-            if (categoryContext != null && categoryContext.getCata_type() != null) {
-                if (categoryContext.getCata_type().equals(CategoryType.INCOME))
-                    transaction.setTrns_type(TransactionType.CREDIT);
-                else if (categoryContext.getCata_type().equals(CategoryType.EXPENSE))
-                    transaction.setTrns_type(TransactionType.DEBIT);
-            } else {
-                Toast.makeText(getContext(), "Transaction Type is required.", Toast.LENGTH_SHORT).show();
-                return null; // Or handle error appropriately
+                        break;
+                    case INVESTMENT:
+
+                        break;
+                    case E_WALLET:
+                        transaction.setTrns_type(TransactionType.CREDIT);
+                        break;
+                    case OTHER_ASSET:
+
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unsupported account type: " + accountToPayFrom.getAccount_type());
+                }
             }
-
-
-            // Transaction Name
-            if (categoryContext != null && categoryContext.getCata_name() != null) {
-                transaction.setTrns_name(categoryContext.getCata_name());
-            } else {
-                //transactionNameEditText.setText("Ullla");
-                Toast.makeText(getContext(), "Transaction name is required.", Toast.LENGTH_SHORT).show();
-                return null; // Or handle error appropriately
-            }
-
 
         }
-
 
         // Transaction Amount
         if (transactionAmountEditText != null && transactionAmountEditText.getText() != null) {
@@ -293,6 +375,8 @@ public class TransactionHandelerFragment extends Fragment {
                     } else {
                         transaction.setTrns_amount(amount);
                     }
+                } else if (accountToPayFrom != null) {
+                    transaction.setTrns_amount(amount);
                 }
             }catch (NumberFormatException e) {
                 Log.e(TAG, "Invalid transaction amount: " + transactionAmountEditText.getText().toString(), e);

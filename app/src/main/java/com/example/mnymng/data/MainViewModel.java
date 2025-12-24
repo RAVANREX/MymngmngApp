@@ -14,7 +14,7 @@ public class MainViewModel extends AndroidViewModel {
     private final DataRepository mRepository;
     private final LiveData<Double> mIncome;
     private final LiveData<Double> mExpenses;
-    private final LiveData<Double> mSavings;
+
 
     private final MutableLiveData<String> period = new MutableLiveData<>();
     private final LiveData<Map<String, Double>> spendingAnalysis;
@@ -22,9 +22,10 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(Application application) {
         super(application);
         mRepository = new DataRepository(application);
-        mIncome = mRepository.getIncome();
-        mExpenses = mRepository.getExpenses();
-        mSavings = mRepository.getSavings();
+
+        mIncome = Transformations.switchMap(period, p -> mRepository.getIncome(p));
+        mExpenses = Transformations.switchMap(period, p -> mRepository.getExpenses(p));
+
 
         spendingAnalysis = Transformations.switchMap(period, p -> mRepository.getSpendingAnalysis(p));
     }
@@ -37,9 +38,7 @@ public class MainViewModel extends AndroidViewModel {
         return mExpenses;
     }
 
-    public LiveData<Double> getSavings() {
-        return mSavings;
-    }
+
 
     public void setPeriod(String newPeriod) {
         period.setValue(newPeriod);

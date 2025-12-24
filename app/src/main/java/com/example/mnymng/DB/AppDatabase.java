@@ -160,81 +160,81 @@ public abstract class AppDatabase extends RoomDatabase {
                 categoryDao.insert(new Category("REITs", CategoryType.TRIP, "🏢", "Real Estate Investment Trusts", null, null, null, null, null));
                 categoryDao.insert(new Category("Annuities", CategoryType.TRIP, "⏳", "Retirement income products", null, null, null, null, null));
                 categoryDao.insert(new Category("Private Equity", CategoryType.TRIP, "💼", "Investment in private companies", null, null, null, null, null));
-
-
-                // Original Accounts (IDs: 1-3 assumed, 15 params for constructor)
-                accountDao.insert(new Account("Main Bank Account", AccountType.BANK, 5000.00, 5000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Credit Card Gold", AccountType.CREDIT_CARD, -500.00, -500.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Cash Wallet", AccountType.WALLET, 200.00, 200.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-
-                // NEW Accounts (IDs starting from 4 assumed)
-                accountDao.insert(new Account("Savings Plus",AccountType.BANK, 15000.00, 15000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Travel Rewards Card",AccountType.CREDIT_CARD, -100.00, -100.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Brokerage Account", AccountType.INVESTMENT, 7500.00, 7500.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Emergency Fund", AccountType.BANK, 10000.00, 10000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("PayPal Balance", AccountType.E_WALLET, 350.00, 350.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Business Checking", AccountType.BANK, 12000.00, 12000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Student Loan Account", AccountType.LOAN, -25000.00, -25000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
-                accountDao.insert(new Account("Crypto Wallet", AccountType.E_WALLET, 1200.00, 1200.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 11
-                accountDao.insert(new Account("Vacation Savings", AccountType.BANK, 800.00, 800.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 12
-                accountDao.insert(new Account("Store Credit Card",AccountType.CREDIT_CARD, -50.00, -50.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 13
-
-
-                long dayMillis = TimeUnit.DAYS.toMillis(1);
-                long monthMillis = TimeUnit.DAYS.toMillis(30); // Approx for a month
-
-                // Original Transactions (14 params for constructor, using fully qualified enums)
-                // Assuming Category IDs 1 (Salary), 6 (Groceries), 16 (Stocks) and Account IDs 1 (Main Bank Account), 2 (Credit Card Gold), 3 (Cash Wallet)
-                transactionDao.insert(new Transaction(1L, 1L, "Monthly Salary", TransactionType.CREDIT, 2500.00, new Date(System.currentTimeMillis() - 5*dayMillis), null, null, null, "Company XYZ",null,null,null,null));
-                transactionDao.insert(new Transaction(2L, 6L, "Weekly Groceries", TransactionType.DEBIT, -75.50, new Date(System.currentTimeMillis() - 4*dayMillis), null, null, null, "Supermarket",null,null,null,null));
-                transactionDao.insert(new Transaction(1L, 16L, "Stock Purchase", TransactionType.DEBIT, -1000.00, new Date(System.currentTimeMillis() - 3*dayMillis), null, null, null, "Brokerage App",null,null,null,null));
-                transactionDao.insert(new Transaction(1L, 7L, "Monthly Rent", TransactionType.DEBIT, -1200.00, new Date(System.currentTimeMillis() - 2*dayMillis), null, null, null, "Landlord",null,null,null,null));
-                transactionDao.insert(new Transaction(3L, 10L, "Dinner Out", TransactionType.DEBIT, -50.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Restaurant ABC",null,null,null,null));
-
-                // NEW Transactions (using various new categories and accounts)
-                // Account IDs: 1-13, Category IDs: 1-55
-                transactionDao.insert(new Transaction(4L, 21L, "Consulting Payment", TransactionType.CREDIT, 1200.00, new Date(System.currentTimeMillis() - 10*dayMillis), null, null, null, "Client Corp", null, null, null, null)); // Savings Plus, Consulting Gig
-                transactionDao.insert(new Transaction(5L, 31L, "Dog Food", TransactionType.DEBIT, -45.00, new Date(System.currentTimeMillis() - 9*dayMillis), null, null, null, "Pet Store", null, null, null, null)); // Travel Rewards Card, Pet Care
-                transactionDao.insert(new Transaction(6L, 46L, "ETF Purchase", TransactionType.DEBIT, -500.00, new Date(System.currentTimeMillis() - 8*dayMillis), null, null, null, "InvestPro Platform", null, null, null, null)); // Brokerage Account, ETFs
-                transactionDao.insert(new Transaction(1L, 22L, "Etsy Sale", TransactionType.CREDIT, 85.00, new Date(System.currentTimeMillis() - 7*dayMillis), null, null, null, "Online Customer", null, null, null, null)); // Main Bank Account, Online Sales
-                transactionDao.insert(new Transaction(2L, 32L, "Plumbing Repair", TransactionType.DEBIT, -120.00, new Date(System.currentTimeMillis() - 6*dayMillis), null, null, null, "Handyman Services", null, null, null, null)); // Credit Card Gold, Home Maintenance
-                transactionDao.insert(new Transaction(7L, 11L, "Concert Tickets", TransactionType.DEBIT, -250.00, new Date(System.currentTimeMillis() - 5*dayMillis), null, null, null, "TicketMaster", null, null, null, null)); // Emergency Fund, Entertainment
-                transactionDao.insert(new Transaction(8L, 23L, "Birthday Gift", TransactionType.CREDIT, 100.00, new Date(System.currentTimeMillis() - 4*dayMillis), null, null, null, "Family", null, null, null, null)); // PayPal Balance, Gifts Received
-                transactionDao.insert(new Transaction(9L, 33L, "Flight Tickets", TransactionType.DEBIT, -700.00, new Date(System.currentTimeMillis() - 3*dayMillis), null, null, null, "Airline X", null, null, null, null)); // Business Checking, Travel & Vacation
-                transactionDao.insert(new Transaction(11L, 19L, "Bitcoin Purchase", TransactionType.DEBIT, -200.00, new Date(System.currentTimeMillis() - 2*dayMillis), null, null, null, "Crypto Exchange", null, null, null, null)); // Crypto Wallet, Cryptocurrency
-                transactionDao.insert(new Transaction(3L, 40L, "New Phone Case", TransactionType.DEBIT, -30.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Accessory Shop", null, null, null, null)); // Cash Wallet, Electronics
-                transactionDao.insert(new Transaction(1L, 15L, "Music Subscription", TransactionType.DEBIT, -15.00, new Date(System.currentTimeMillis() - 12*dayMillis), null, null, null, "Spotify", null, null, null, null)); // Main Bank, Subscriptions
-                transactionDao.insert(new Transaction(4L, 25L, "Book Royalties", TransactionType.CREDIT, 75.00, new Date(System.currentTimeMillis() - 11*dayMillis), null, null, null, "Publisher", null, null, null, null)); // Savings Plus, Royalties
-                transactionDao.insert(new Transaction(6L, 47L, "Gold Coin", TransactionType.DEBIT, -300.00, new Date(System.currentTimeMillis() - 10*dayMillis), null, null, null, "Mint", null, null, null, null)); // Brokerage Account, Gold/Silver
-                transactionDao.insert(new Transaction(2L, 35L, "Car Insurance Premium", TransactionType.DEBIT, -60.00, new Date(System.currentTimeMillis() - 9*dayMillis), null, null, null, "InsureCo", null, null, null, null)); // Credit Card Gold, Insurance
-                transactionDao.insert(new Transaction(7L, 37L, "Gym Membership", TransactionType.DEBIT, -90.00, new Date(System.currentTimeMillis() - 8*dayMillis), null, null, null, "FitClub", null, null, null, null)); // Emergency Fund, Fitness & Wellness
-                transactionDao.insert(new Transaction(12L, 13L, "University Textbooks", TransactionType.DEBIT, -200.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Campus Store", null, null, null, null)); // Vacation Savings, Education
-                transactionDao.insert(new Transaction(5L, 29L, "Stock Options Vesting", TransactionType.CREDIT, 500.00, new Date(System.currentTimeMillis() - 14*dayMillis), null, null, null, "Company Stock Plan", null, null, null, null)); // Travel Rewards Card, Stock Options
-                transactionDao.insert(new Transaction(13L, 44L, "New Curtains", TransactionType.DEBIT, -40.00, new Date(System.currentTimeMillis() - 13*dayMillis), null, null, null, "Home Goods", null, null, null, null)); // Store Credit Card, Home Decor
-                transactionDao.insert(new Transaction(8L, 48L, "Lending Club Note", TransactionType.DEBIT, -150.00, new Date(System.currentTimeMillis() - 12*dayMillis), null, null, null, "P2P Platform", null, null, null, null)); // PayPal Balance, Peer-to-Peer Lending
-                transactionDao.insert(new Transaction(10L, 8L, "Water & Electricity Bill", TransactionType.DEBIT, -180.00, new Date(System.currentTimeMillis() - 11*dayMillis), null, null, null, "City Utilities", null, null, null, null)); // Student Loan Account, Utilities
-
-                // NEW Recurring Data
-                // account_id, cata_id, lastTransactionId, recurring_amount, recurring_frequency, recurring_sdt, recurring_edt, recurring_nxt_duedt, recurring_alarm_rem, recurring_is_auto, v1, v2, v3, v4, v5
-                recurringDao.insert(new Recurring(1L, 7L, null, 1200.00, RecurringFrequency.MONTHLY, new Date(123, 2, 1), new Date(125, 0, 15), new Date(125, 0, 10), true, true, "Rent Payment", null, null, null, null));
-                recurringDao.insert(new Recurring(1L, 1L, null, 2500.00, RecurringFrequency.MONTHLY, new Date(123, 2, 5), new Date(125, 0, 25), new Date(125, 0, 20), true, true, "Salary Deposit", null, null, null, null));
-                recurringDao.insert(new Recurring(2L, 15L, null, 15.00, RecurringFrequency.MONTHLY, new Date(123, 2, 10), new Date(125, 1, 10), new Date(125, 1, 5), true, false, "Music Subscription", null, null, null, null));
-                recurringDao.insert(new Recurring(1L, 8L, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 2, 15), new Date(125, 1, 20), new Date(125, 1, 15), true, true, "Utilities Bill", null, null, null, null));
-                recurringDao.insert(new Recurring(4L, 25L, null, 75.00, RecurringFrequency.QUARTERLY, new Date(123, 3, 1), new Date(125, 2, 15), new Date(125, 2, 10), false, true, "Book Royalties", null, null, null, null));
-                recurringDao.insert(new Recurring(6L, 16L, null, 500.00, RecurringFrequency.MONTHLY, new Date(123, 3, 5), new Date(125, 2, 25), new Date(125, 2, 20), true, true, "Monthly Investment", "Stocks", null, null, null));
-                recurringDao.insert(new Recurring(7L, 37L, null, 90.00, RecurringFrequency.MONTHLY, new Date(123, 3, 10), new Date(125, 3, 10), new Date(125, 3, 5), true, false, "Gym Membership", null, null, null, null));
-                recurringDao.insert(new Recurring(9L, null, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 3, 15), new Date(125, 3, 20), new Date(125, 3, 15), true, true, "Loan Repayment", "Student Loan", null, null, null));
-                recurringDao.insert(new Recurring(1L, 15L, null, 10.00, RecurringFrequency.MONTHLY, new Date(123, 4, 1), new Date(125, 4, 15), new Date(125, 4, 10), false, false, "Cloud Storage", null, null, null, null));
-                recurringDao.insert(new Recurring(5L, 31L, null, 25.00, RecurringFrequency.WEEKLY, new Date(123, 4, 5), new Date(125, 4, 25), new Date(125, 4, 20), false, true, "Pet Food Subscription", null, null, null, null));
-                recurringDao.insert(new Recurring(12L, null, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 4, 10), new Date(125, 5, 10), new Date(125, 5, 5), true, true, "Vacation Savings Deposit", null, null, null, null));
-                recurringDao.insert(new Recurring(1L, 4L, null, 300.00, RecurringFrequency.QUARTERLY, new Date(123, 4, 15), new Date(125, 5, 20), new Date(125, 5, 15), true, true, "Property Tax Savings", null, null, null, null));
-                recurringDao.insert(new Recurring(8L, 26L, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 5, 1), new Date(125, 6, 15), new Date(125, 6, 10), false, true, "Cashback Rewards Transfer", null, null, null, null));
-                recurringDao.insert(new Recurring(6L, 17L, null, 100.00, RecurringFrequency.MONTHLY, new Date(123, 5, 5), new Date(125, 6, 25), new Date(125, 6, 20), true, true, "Mutual Fund SIP", null, null, null, null));
-                recurringDao.insert(new Recurring(1L, 38L, null, 20.00, RecurringFrequency.YEARLY, new Date(123, 5, 10), new Date(125, 7, 10), new Date(125, 7, 5), true, false, "Charity Donation", "Annual", null, null, null));
-                recurringDao.insert(new Recurring(11L, 19L, null, 50.00, RecurringFrequency.WEEKLY, new Date(123, 5, 15), new Date(125, 7, 20), new Date(125, 7, 15), false, true, "Crypto DCA", "Bitcoin", null, null, null));
-                recurringDao.insert(new Recurring(4L, 24L, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 0, 10), new Date(125, 8, 15), new Date(125, 8, 10), true, true, "Interest Income Transfer", null, null, null, null));
-                recurringDao.insert(new Recurring(2L, 42L, null, 30.00, RecurringFrequency.MONTHLY, new Date(123, 0, 20), new Date(125, 9, 25), new Date(125, 9, 20), false, true, "Software Subscription", "IDE", null, null, null));
-                recurringDao.insert(new Recurring(10L, null, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 1, 5), new Date(125, 10, 10), new Date(125, 10, 1), true, true, "Personal Loan EMI", null, null, null, null));
+//
+//
+//                // Original Accounts (IDs: 1-3 assumed, 15 params for constructor)
+                accountDao.insert(new Account("Main Bank Account", AccountType.BANK, 0.00, 0.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Credit Card Gold", AccountType.CREDIT_CARD, -500.00, -500.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Cash Wallet", AccountType.WALLET, 200.00, 200.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//
+//                // NEW Accounts (IDs starting from 4 assumed)
+//                accountDao.insert(new Account("Savings Plus",AccountType.BANK, 15000.00, 15000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Travel Rewards Card",AccountType.CREDIT_CARD, -100.00, -100.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Brokerage Account", AccountType.INVESTMENT, 7500.00, 7500.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Emergency Fund", AccountType.BANK, 10000.00, 10000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("PayPal Balance", AccountType.E_WALLET, 350.00, 350.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Business Checking", AccountType.BANK, 12000.00, 12000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Student Loan Account", AccountType.LOAN, -25000.00, -25000.00, 0.0, null, null, "USD", null, null, null, null, null, null, null));
+//                accountDao.insert(new Account("Crypto Wallet", AccountType.E_WALLET, 1200.00, 1200.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 11
+//                accountDao.insert(new Account("Vacation Savings", AccountType.BANK, 800.00, 800.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 12
+//                accountDao.insert(new Account("Store Credit Card",AccountType.CREDIT_CARD, -50.00, -50.00, 0.0, null, null, "USD", null, null, null, null, null, null, null)); // Account ID 13
+//
+//
+//                long dayMillis = TimeUnit.DAYS.toMillis(1);
+//                long monthMillis = TimeUnit.DAYS.toMillis(30); // Approx for a month
+//
+//                // Original Transactions (14 params for constructor, using fully qualified enums)
+//                // Assuming Category IDs 1 (Salary), 6 (Groceries), 16 (Stocks) and Account IDs 1 (Main Bank Account), 2 (Credit Card Gold), 3 (Cash Wallet)
+//                transactionDao.insert(new Transaction(1L, 1L, "Monthly Salary", TransactionType.CREDIT, 2500.00, new Date(System.currentTimeMillis() - 5*dayMillis), null, null, null, "Company XYZ",null,null,null,null));
+//                transactionDao.insert(new Transaction(2L, 6L, "Weekly Groceries", TransactionType.DEBIT, -75.50, new Date(System.currentTimeMillis() - 4*dayMillis), null, null, null, "Supermarket",null,null,null,null));
+//                transactionDao.insert(new Transaction(1L, 16L, "Stock Purchase", TransactionType.DEBIT, -1000.00, new Date(System.currentTimeMillis() - 3*dayMillis), null, null, null, "Brokerage App",null,null,null,null));
+//                transactionDao.insert(new Transaction(1L, 7L, "Monthly Rent", TransactionType.DEBIT, -1200.00, new Date(System.currentTimeMillis() - 2*dayMillis), null, null, null, "Landlord",null,null,null,null));
+//                transactionDao.insert(new Transaction(3L, 10L, "Dinner Out", TransactionType.DEBIT, -50.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Restaurant ABC",null,null,null,null));
+//
+//                // NEW Transactions (using various new categories and accounts)
+//                // Account IDs: 1-13, Category IDs: 1-55
+//                transactionDao.insert(new Transaction(4L, 21L, "Consulting Payment", TransactionType.CREDIT, 1200.00, new Date(System.currentTimeMillis() - 10*dayMillis), null, null, null, "Client Corp", null, null, null, null)); // Savings Plus, Consulting Gig
+//                transactionDao.insert(new Transaction(5L, 31L, "Dog Food", TransactionType.DEBIT, -45.00, new Date(System.currentTimeMillis() - 9*dayMillis), null, null, null, "Pet Store", null, null, null, null)); // Travel Rewards Card, Pet Care
+//                transactionDao.insert(new Transaction(6L, 46L, "ETF Purchase", TransactionType.DEBIT, -500.00, new Date(System.currentTimeMillis() - 8*dayMillis), null, null, null, "InvestPro Platform", null, null, null, null)); // Brokerage Account, ETFs
+//                transactionDao.insert(new Transaction(1L, 22L, "Etsy Sale", TransactionType.CREDIT, 85.00, new Date(System.currentTimeMillis() - 7*dayMillis), null, null, null, "Online Customer", null, null, null, null)); // Main Bank Account, Online Sales
+//                transactionDao.insert(new Transaction(2L, 32L, "Plumbing Repair", TransactionType.DEBIT, -120.00, new Date(System.currentTimeMillis() - 6*dayMillis), null, null, null, "Handyman Services", null, null, null, null)); // Credit Card Gold, Home Maintenance
+//                transactionDao.insert(new Transaction(7L, 11L, "Concert Tickets", TransactionType.DEBIT, -250.00, new Date(System.currentTimeMillis() - 5*dayMillis), null, null, null, "TicketMaster", null, null, null, null)); // Emergency Fund, Entertainment
+//                transactionDao.insert(new Transaction(8L, 23L, "Birthday Gift", TransactionType.CREDIT, 100.00, new Date(System.currentTimeMillis() - 4*dayMillis), null, null, null, "Family", null, null, null, null)); // PayPal Balance, Gifts Received
+//                transactionDao.insert(new Transaction(9L, 33L, "Flight Tickets", TransactionType.DEBIT, -700.00, new Date(System.currentTimeMillis() - 3*dayMillis), null, null, null, "Airline X", null, null, null, null)); // Business Checking, Travel & Vacation
+//                transactionDao.insert(new Transaction(11L, 19L, "Bitcoin Purchase", TransactionType.DEBIT, -200.00, new Date(System.currentTimeMillis() - 2*dayMillis), null, null, null, "Crypto Exchange", null, null, null, null)); // Crypto Wallet, Cryptocurrency
+//                transactionDao.insert(new Transaction(3L, 40L, "New Phone Case", TransactionType.DEBIT, -30.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Accessory Shop", null, null, null, null)); // Cash Wallet, Electronics
+//                transactionDao.insert(new Transaction(1L, 15L, "Music Subscription", TransactionType.DEBIT, -15.00, new Date(System.currentTimeMillis() - 12*dayMillis), null, null, null, "Spotify", null, null, null, null)); // Main Bank, Subscriptions
+//                transactionDao.insert(new Transaction(4L, 25L, "Book Royalties", TransactionType.CREDIT, 75.00, new Date(System.currentTimeMillis() - 11*dayMillis), null, null, null, "Publisher", null, null, null, null)); // Savings Plus, Royalties
+//                transactionDao.insert(new Transaction(6L, 47L, "Gold Coin", TransactionType.DEBIT, -300.00, new Date(System.currentTimeMillis() - 10*dayMillis), null, null, null, "Mint", null, null, null, null)); // Brokerage Account, Gold/Silver
+//                transactionDao.insert(new Transaction(2L, 35L, "Car Insurance Premium", TransactionType.DEBIT, -60.00, new Date(System.currentTimeMillis() - 9*dayMillis), null, null, null, "InsureCo", null, null, null, null)); // Credit Card Gold, Insurance
+//                transactionDao.insert(new Transaction(7L, 37L, "Gym Membership", TransactionType.DEBIT, -90.00, new Date(System.currentTimeMillis() - 8*dayMillis), null, null, null, "FitClub", null, null, null, null)); // Emergency Fund, Fitness & Wellness
+//                transactionDao.insert(new Transaction(12L, 13L, "University Textbooks", TransactionType.DEBIT, -200.00, new Date(System.currentTimeMillis() - 1*dayMillis), null, null, null, "Campus Store", null, null, null, null)); // Vacation Savings, Education
+//                transactionDao.insert(new Transaction(5L, 29L, "Stock Options Vesting", TransactionType.CREDIT, 500.00, new Date(System.currentTimeMillis() - 14*dayMillis), null, null, null, "Company Stock Plan", null, null, null, null)); // Travel Rewards Card, Stock Options
+//                transactionDao.insert(new Transaction(13L, 44L, "New Curtains", TransactionType.DEBIT, -40.00, new Date(System.currentTimeMillis() - 13*dayMillis), null, null, null, "Home Goods", null, null, null, null)); // Store Credit Card, Home Decor
+//                transactionDao.insert(new Transaction(8L, 48L, "Lending Club Note", TransactionType.DEBIT, -150.00, new Date(System.currentTimeMillis() - 12*dayMillis), null, null, null, "P2P Platform", null, null, null, null)); // PayPal Balance, Peer-to-Peer Lending
+//                transactionDao.insert(new Transaction(10L, 8L, "Water & Electricity Bill", TransactionType.DEBIT, -180.00, new Date(System.currentTimeMillis() - 11*dayMillis), null, null, null, "City Utilities", null, null, null, null)); // Student Loan Account, Utilities
+//
+//                // NEW Recurring Data
+//                // account_id, cata_id, lastTransactionId, recurring_amount, recurring_frequency, recurring_sdt, recurring_edt, recurring_nxt_duedt, recurring_alarm_rem, recurring_is_auto, v1, v2, v3, v4, v5
+//                recurringDao.insert(new Recurring(1L, 7L, null, 1200.00, RecurringFrequency.MONTHLY, new Date(123, 2, 1), new Date(125, 0, 15), new Date(125, 0, 10), true, true, "Rent Payment", null, null, null, null));
+//                recurringDao.insert(new Recurring(1L, 1L, null, 2500.00, RecurringFrequency.MONTHLY, new Date(123, 2, 5), new Date(125, 0, 25), new Date(125, 0, 20), true, true, "Salary Deposit", null, null, null, null));
+//                recurringDao.insert(new Recurring(2L, 15L, null, 15.00, RecurringFrequency.MONTHLY, new Date(123, 2, 10), new Date(125, 1, 10), new Date(125, 1, 5), true, false, "Music Subscription", null, null, null, null));
+//                recurringDao.insert(new Recurring(1L, 8L, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 2, 15), new Date(125, 1, 20), new Date(125, 1, 15), true, true, "Utilities Bill", null, null, null, null));
+//                recurringDao.insert(new Recurring(4L, 25L, null, 75.00, RecurringFrequency.QUARTERLY, new Date(123, 3, 1), new Date(125, 2, 15), new Date(125, 2, 10), false, true, "Book Royalties", null, null, null, null));
+//                recurringDao.insert(new Recurring(6L, 16L, null, 500.00, RecurringFrequency.MONTHLY, new Date(123, 3, 5), new Date(125, 2, 25), new Date(125, 2, 20), true, true, "Monthly Investment", "Stocks", null, null, null));
+//                recurringDao.insert(new Recurring(7L, 37L, null, 90.00, RecurringFrequency.MONTHLY, new Date(123, 3, 10), new Date(125, 3, 10), new Date(125, 3, 5), true, false, "Gym Membership", null, null, null, null));
+//                recurringDao.insert(new Recurring(9L, null, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 3, 15), new Date(125, 3, 20), new Date(125, 3, 15), true, true, "Loan Repayment", "Student Loan", null, null, null));
+//                recurringDao.insert(new Recurring(1L, 15L, null, 10.00, RecurringFrequency.MONTHLY, new Date(123, 4, 1), new Date(125, 4, 15), new Date(125, 4, 10), false, false, "Cloud Storage", null, null, null, null));
+//                recurringDao.insert(new Recurring(5L, 31L, null, 25.00, RecurringFrequency.WEEKLY, new Date(123, 4, 5), new Date(125, 4, 25), new Date(125, 4, 20), false, true, "Pet Food Subscription", null, null, null, null));
+//                recurringDao.insert(new Recurring(12L, null, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 4, 10), new Date(125, 5, 10), new Date(125, 5, 5), true, true, "Vacation Savings Deposit", null, null, null, null));
+//                recurringDao.insert(new Recurring(1L, 4L, null, 300.00, RecurringFrequency.QUARTERLY, new Date(123, 4, 15), new Date(125, 5, 20), new Date(125, 5, 15), true, true, "Property Tax Savings", null, null, null, null));
+//                recurringDao.insert(new Recurring(8L, 26L, null, 50.00, RecurringFrequency.MONTHLY, new Date(123, 5, 1), new Date(125, 6, 15), new Date(125, 6, 10), false, true, "Cashback Rewards Transfer", null, null, null, null));
+//                recurringDao.insert(new Recurring(6L, 17L, null, 100.00, RecurringFrequency.MONTHLY, new Date(123, 5, 5), new Date(125, 6, 25), new Date(125, 6, 20), true, true, "Mutual Fund SIP", null, null, null, null));
+//                recurringDao.insert(new Recurring(1L, 38L, null, 20.00, RecurringFrequency.YEARLY, new Date(123, 5, 10), new Date(125, 7, 10), new Date(125, 7, 5), true, false, "Charity Donation", "Annual", null, null, null));
+//                recurringDao.insert(new Recurring(11L, 19L, null, 50.00, RecurringFrequency.WEEKLY, new Date(123, 5, 15), new Date(125, 7, 20), new Date(125, 7, 15), false, true, "Crypto DCA", "Bitcoin", null, null, null));
+//                recurringDao.insert(new Recurring(4L, 24L, null, 200.00, RecurringFrequency.MONTHLY, new Date(123, 0, 10), new Date(125, 8, 15), new Date(125, 8, 10), true, true, "Interest Income Transfer", null, null, null, null));
+//                recurringDao.insert(new Recurring(2L, 42L, null, 30.00, RecurringFrequency.MONTHLY, new Date(123, 0, 20), new Date(125, 9, 25), new Date(125, 9, 20), false, true, "Software Subscription", "IDE", null, null, null));
+//                recurringDao.insert(new Recurring(10L, null, null, 150.00, RecurringFrequency.MONTHLY, new Date(123, 1, 5), new Date(125, 10, 10), new Date(125, 10, 1), true, true, "Personal Loan EMI", null, null, null, null));
 
 
             });

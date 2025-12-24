@@ -87,6 +87,7 @@ public class AccountHandlerFragment extends Fragment {
                 //accountOpeningBalanceEditText.setEnabled(true); // Disable editing
             }else {
                 accountOpeningBalanceEditText.setEnabled(false);
+                accountOpeningBalanceEditText.setVisibility(View.GONE);
             }
         }
     }

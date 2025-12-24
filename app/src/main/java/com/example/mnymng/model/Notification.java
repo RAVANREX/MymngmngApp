@@ -1,5 +1,5 @@
 
-package com.example.mnymng.models;
+package com.example.mnymng.model;
 
 public class Notification {
     private String title;

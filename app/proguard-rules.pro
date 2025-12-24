@@ -19,3 +19,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#-keep class com.example.mnymng.DB.models.** { *; }
+#-keep class com.example.mnymng.DB.dao.** { *; }
+#-keep class com.example.mnymng.DB.utils.** { *; }
+#-keep class com.example.mnymng.DB.enums.** { *; }
+#-keep class com.example.mnymng.DB.** { *; }
+
+-keep class com.example.mnymng.** { *; }
+
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}

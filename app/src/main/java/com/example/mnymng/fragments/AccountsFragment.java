@@ -86,7 +86,8 @@ public class AccountsFragment extends Fragment {
                     remainingBalance.setVisibility(View.GONE);
                     rBalanceCurrency.setVisibility(View.GONE);
                     rBalance.setVisibility(View.GONE);
-                    payButton.setText("Transfer");
+                    payButton.setVisibility(View.GONE);
+                    //payButton.setText("Transfer");
 
             } else if (accountType == AccountType.CREDIT_CARD) {
                     currentBalance.setText("Remaining");
@@ -132,7 +133,8 @@ public class AccountsFragment extends Fragment {
                 rBalance.setVisibility(View.GONE);
                 payButton.setText("Add");
 
-            }else if (accountType == AccountType.OTHER_ASSET) {
+            }
+            else if (accountType == AccountType.OTHER_ASSET) {
                 currentBalance.setText("Balance");
                 remainingBalance.setVisibility(View.GONE);
                 rBalanceCurrency.setVisibility(View.GONE);
@@ -211,11 +213,11 @@ public class AccountsFragment extends Fragment {
                     // Add your payment functionality here
                     Log.d("AccountsFragment", "Pay button clicked for account: " + selectedAccount.getAccount_name());
                     // Example: navigate to a payment screen or show a payment dialog
-                    // PopupTransactionFragment popupTransactionFragment = new PopupTransactionFragment();
-                    // Bundle bundle = new Bundle();
-                    // bundle.putSerializable("accountToPayFrom", (Serializable) selectedAccount);
-                    // popupTransactionFragment.setArguments(bundle);
-                    // popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragment_PayTag");
+                     PopupTransactionFragment popupTransactionFragment = new PopupTransactionFragment();
+                     Bundle bundle = new Bundle();
+                     bundle.putSerializable("accountToPayFrom", (Serializable) selectedAccount);
+                     popupTransactionFragment.setArguments(bundle);
+                     popupTransactionFragment.show(getParentFragmentManager(), "PopupTransactionFragment_PayTag");
                 }
             });
         };

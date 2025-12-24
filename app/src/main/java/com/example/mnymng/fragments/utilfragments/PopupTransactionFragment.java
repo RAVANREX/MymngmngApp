@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.dao.TransactionDao;
 import com.example.mnymng.DB.logic.TransactionChainingManager;
+import com.example.mnymng.DB.models.Account;
 import com.example.mnymng.DB.models.Transaction;
 import com.example.mnymng.R;
 import com.example.mnymng.adapter.MyViewPagerAdapter;
@@ -33,6 +34,7 @@ public class PopupTransactionFragment extends DialogFragment {
     private Transaction transactionToAdd;
     private Transaction transactionToEdit;
     private TransactionDao transactionDao;
+    public Account accountToPayFrom;
     private Category categoryContext;
 
     @Nullable
@@ -55,6 +57,12 @@ public class PopupTransactionFragment extends DialogFragment {
                 if (serializableTransaction instanceof Transaction) {
                     transactionToEdit = (Transaction) serializableTransaction;
                     transactionToAdd = null; // Ensure only one mode is active
+                }
+            }
+            if (getArguments().containsKey("accountToPayFrom")) { // Check for transactionToEdit
+                Serializable serializableAccount = getArguments().getSerializable("accountToPayFrom");
+                if (serializableAccount instanceof Account) {
+                    accountToPayFrom = (Account) serializableAccount;
                 }
             }
             // Category might still be relevant for picking a category for the transaction,

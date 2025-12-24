@@ -17,18 +17,24 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements OnChartValueSelectedListener {
 
     private MainViewModel mViewModel;
     private BarChart barChart;
     private TextView tvIncome, tvExpense, tvSaving;
     private MaterialButtonToggleGroup toggleGroup;
+    private SelectiveCategoryLabelFormatter xAxisFormatter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +71,7 @@ public class DashboardFragment extends Fragment {
         barChart.getAxisLeft().setDrawGridLines(false);
         barChart.getAxisRight().setEnabled(false);
         barChart.getLegend().setEnabled(false);
+        barChart.setOnChartValueSelectedListener(this);
     }
 
     private void setupToggleGroup() {
@@ -126,9 +133,60 @@ public class DashboardFragment extends Fragment {
         BarData barData = new BarData(dataSet);
         barData.setBarWidth(0.5f);
 
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        xAxisFormatter = new SelectiveCategoryLabelFormatter(labels);
+        barChart.getXAxis().setValueFormatter(xAxisFormatter);
         barChart.setData(barData);
         barChart.invalidate();
         barChart.animateY(1000);
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        if (xAxisFormatter != null) {
+            xAxisFormatter.setSelected((int) e.getX());
+            barChart.invalidate();
+        }
+    }
+
+    @Override
+    public void onNothingSelected() {
+        if (xAxisFormatter != null) {
+            xAxisFormatter.clearSelection();
+            barChart.invalidate();
+        }
+    }
+
+    private static class SelectiveCategoryLabelFormatter extends IndexAxisValueFormatter {
+        private int selectedIndex = -1;
+
+        public SelectiveCategoryLabelFormatter(Collection<String> values) {
+            super(values);
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            int index = (int) value;
+            if (index < 0 || index >= getValues().length) {
+                return "";
+            }
+
+            if (selectedIndex != -1) { // A bar is selected
+                if (index == selectedIndex) {
+                    return getValues()[index];
+                }
+                return ""; // Hide other labels
+            }
+
+            // If nothing is selected, show the label. The chart will handle overlapping.
+            return getValues()[index];
+        }
+
+        public void setSelected(int index) {
+            this.selectedIndex = index;
+        }
+
+        public void clearSelection() {
+            this.selectedIndex = -1;
+        }
     }
 }

@@ -158,6 +158,11 @@ public class PopupAccountFragment extends DialogFragment {
                              }
                              // newAccount.type = accountType; // Ensure accountType is set
                              Executors.newSingleThreadExecutor().execute(() -> {
+                                 if(newAccount.getAccount_type() == AccountType.LENDING) {
+                                     newAccount.setAccount_opening_balance(newAccount.getAccount_opening_balance() * -1);
+                                     newAccount.setAccount_current_balance(newAccount.getAccount_current_balance() * -1);
+                                     Log.d("PopupAccountFrag", "New account: " + newAccount.getAccount_current_balance());
+                                 }
                                  accountDao.insert(newAccount); // Direct DAO call
                              });
                              Toast.makeText(getContext(), "Account added", Toast.LENGTH_SHORT).show();

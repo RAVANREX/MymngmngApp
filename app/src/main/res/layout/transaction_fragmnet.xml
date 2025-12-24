@@ -17,7 +17,7 @@
             android:id="@+id/accountTypeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Account_type" />
+            android:text="Account Type" />
 
         <Spinner
             android:id="@+id/accountTypeSpinner"

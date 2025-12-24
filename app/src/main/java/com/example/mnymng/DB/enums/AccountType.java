@@ -11,6 +11,6 @@ public enum AccountType implements Serializable {
     INSURANCE,
     INVESTMENT,
     E_WALLET,
-    OTHER_ASSET,
+    OTHER_ASSET
     // Add other account types as needed
 }
