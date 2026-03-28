@@ -6,7 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.mnymng.DB.enums.CategoryType;
+
 import com.example.mnymng.DB.enums.RecurringFrequency;
 import com.example.mnymng.DB.utils.DateConverter;
 
@@ -20,10 +20,7 @@ import java.util.Date;
                         childColumns = "account_id"),
                 @ForeignKey(entity = Category.class,
                         parentColumns = "cata_id",
-                        childColumns = "cata_id"), // Or CASCADE
-                @ForeignKey(entity = Transaction.class,
-                        parentColumns = "trns_id",
-                        childColumns = "last_transaction_id") // Or CASCADE
+                        childColumns = "cata_id") // Or CASCADE
         })
 @TypeConverters(DateConverter.class)
 public class Recurring implements Serializable {
@@ -33,8 +30,6 @@ public class Recurring implements Serializable {
     public long account_id;
     @ColumnInfo(name = "cata_id", index = true)
     public Long cata_id; // Allow NULL
-    @ColumnInfo(name = "last_transaction_id", index = true)
-    public Long lastTransactionId;
     @ColumnInfo(name = "recurring_amount")
     public double recurring_amount;
     @ColumnInfo(name = "recurring_frequency")
@@ -60,12 +55,13 @@ public class Recurring implements Serializable {
     @ColumnInfo(name = "recurring_value5")
     public String recurring_value5;
 
-    public Recurring(long account_id, Long cata_id, Long lastTransactionId, double recurring_amount, RecurringFrequency recurring_frequency, Date recurring_sdt, Date recurring_edt,
+    public Recurring() {}
+
+    public Recurring(long account_id, Long cata_id, double recurring_amount, RecurringFrequency recurring_frequency, Date recurring_sdt, Date recurring_edt,
                      Date recurring_nxt_duedt, boolean recurring_alarm_rem, boolean recurring_is_auto, String recurring_value1, String recurring_value2, String recurring_value3,
                      String recurring_value4, String recurring_value5) {
         this.account_id = account_id;
         this.cata_id = cata_id;
-        this.lastTransactionId = lastTransactionId;
         this.recurring_amount = recurring_amount;
         this.recurring_frequency = recurring_frequency;
         this.recurring_sdt = recurring_sdt;
@@ -102,14 +98,6 @@ public class Recurring implements Serializable {
 
     public void setCata_id(Long cata_id) {
         this.cata_id = cata_id;
-    }
-
-    public Long getLastTransactionId() {
-        return lastTransactionId;
-    }
-
-    public void setLastTransactionId(Long lastTransactionId) {
-        this.lastTransactionId = lastTransactionId;
     }
 
     public double getRecurring_amount() {

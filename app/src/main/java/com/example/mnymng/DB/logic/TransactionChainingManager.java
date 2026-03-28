@@ -3,13 +3,14 @@ package com.example.mnymng.DB.logic;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData; // Keep for other methods if they still use it temporarily
 import com.example.mnymng.DB.AppDatabase;
 import com.example.mnymng.DB.dao.AccountDao;
+import com.example.mnymng.DB.dao.RecurringDao;
 import com.example.mnymng.DB.dao.TransactionDao;
 import com.example.mnymng.DB.enums.AccountType;
 import com.example.mnymng.DB.enums.TransactionType;
 import com.example.mnymng.DB.models.Account;
+import com.example.mnymng.DB.models.Recurring;
 import com.example.mnymng.DB.models.Transaction;
 
 import java.util.Date;
@@ -27,11 +28,14 @@ public class TransactionChainingManager {
     private static volatile TransactionChainingManager INSTANCE;
     private final AccountDao accountDao;
     private final TransactionDao transactionDao;
+    private final RecurringDao recurringDao;
+
 
     // Private constructor for singleton pattern
-    private TransactionChainingManager(AccountDao accountDao, TransactionDao transactionDao) {
+    private TransactionChainingManager(AccountDao accountDao, TransactionDao transactionDao, RecurringDao recurringDao) {
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;
+        this.recurringDao = recurringDao;
     }
 
     /**
@@ -45,7 +49,7 @@ public class TransactionChainingManager {
             synchronized (TransactionChainingManager.class) {
                 if (INSTANCE == null) {
                     AppDatabase db = AppDatabase.getDatabase(context.getApplicationContext());
-                    INSTANCE = new TransactionChainingManager(db.accountDao(), db.transactionDao());
+                    INSTANCE = new TransactionChainingManager(db.accountDao(), db.transactionDao(), db.recurringDao());
                 }
             }
         }
@@ -54,7 +58,7 @@ public class TransactionChainingManager {
 
     // --- General Transaction Methods ---
 
-    public void createTransaction(Transaction transaction) {
+    public void createTransaction(Transaction transaction, Recurring recurring) {
         AccountType accountType = null;
         if (transaction == null) {
             throw new IllegalArgumentException("Transaction and AccountType cannot be null.");
@@ -68,38 +72,38 @@ public class TransactionChainingManager {
         }
         switch (accountType) {
             case BANK:
-                createBankTransaction(transaction);
+                createBankTransaction(transaction, recurring);
                 break;
             case WALLET:
-                createWalletTransaction(transaction);
+                createWalletTransaction(transaction, recurring);
                 break;
             case LOAN:
-                createLoanTransaction(transaction);
+                createLoanTransaction(transaction, recurring);
                 break;
             case LENDING:
-                createLendingTransaction(transaction);
+                createLendingTransaction(transaction, recurring);
                 break;
             case CREDIT_CARD:
-                createCreditCardTransaction(transaction);
+                createCreditCardTransaction(transaction, recurring);
                 break;
             case INSURANCE:
-                createInsuranceTransaction(transaction);
+                createInsuranceTransaction(transaction, recurring);
                 break;
             case INVESTMENT:
-                createInvestmentTransaction(transaction);
+                createInvestmentTransaction(transaction, recurring);
                 break;
             case E_WALLET:
-                createEWalletTransaction(transaction);
+                createEWalletTransaction(transaction, recurring);
                 break;
             case OTHER_ASSET:
-                createOtherAssetTransaction(transaction);
+                createOtherAssetTransaction(transaction, recurring);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported account type: " + accountType);
         }
     }
 
-    public void updateTransaction(Transaction transactionToUpdate, Transaction oldTransactionState ) {
+    public void updateTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         AccountType accountType = null;
         if (transactionToUpdate == null || oldTransactionState == null) {
             throw new IllegalArgumentException("Transactions and AccountType cannot be null.");
@@ -108,43 +112,45 @@ public class TransactionChainingManager {
         }
         switch (accountType) {
             case BANK:
-                updateBankTransaction(transactionToUpdate, oldTransactionState);
+                updateBankTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case WALLET:
-                updateWalletTransaction(transactionToUpdate, oldTransactionState);
+                updateWalletTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case LOAN:
-                updateLoanTransaction(transactionToUpdate, oldTransactionState);
+                updateLoanTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case LENDING:
-                updateLendingTransaction(transactionToUpdate, oldTransactionState);
+                updateLendingTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case CREDIT_CARD:
-                updateCreditCardTransaction(transactionToUpdate, oldTransactionState);
+                updateCreditCardTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case INSURANCE:
-                updateInsuranceTransaction(transactionToUpdate, oldTransactionState);
+                updateInsuranceTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case INVESTMENT:
-                updateInvestmentTransaction(transactionToUpdate, oldTransactionState);
+                updateInvestmentTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case E_WALLET:
-                updateEWalletTransaction(transactionToUpdate, oldTransactionState);
+                updateEWalletTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             case OTHER_ASSET:
-                updateOtherAssetTransaction(transactionToUpdate, oldTransactionState);
+                updateOtherAssetTransaction(transactionToUpdate, oldTransactionState, recurring);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported account type: " + accountType);
         }
     }
 
-    public void deleteTransaction(Transaction transactionToDelete ) {
+    public void deleteTransaction(Transaction transactionToDelete) {
         AccountType accountType =null;
+        Recurring recurring = null;
         if (transactionToDelete == null) {
             throw new IllegalArgumentException("Transaction and AccountType cannot be null.");
         }else {
             accountType = Objects.requireNonNull(accountDao.getAccountById(transactionToDelete.getAccount_id())).getAccount_type();
+
         }
         switch (accountType) {
             case BANK:
@@ -182,7 +188,7 @@ public class TransactionChainingManager {
     // --- Start of generated methods for AccountType specific transactions ---
 
     // BANK Account Transactions
-    public void createBankTransaction(Transaction transaction) {
+    public void createBankTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -193,6 +199,7 @@ public class TransactionChainingManager {
         if (account.getAccount_type() != AccountType.BANK) {
             throw new IllegalArgumentException("Account type must be BANK. Found: " + account.getAccount_type());
         }
+       // recurringDao.insert(recurring);
         transactionDao.insert(transaction);
         double currentBalance = account.getAccount_current_balance();
         double transactionAmount = transaction.getTrns_amount();
@@ -211,7 +218,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateBankTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateBankTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -252,13 +259,12 @@ public class TransactionChainingManager {
         if (account.getAccount_type() != AccountType.BANK) {
             throw new IllegalArgumentException("Account type must be BANK. Found: " + account.getAccount_type());
         }
-        transactionDao.delete(transactionToDelete);
         double currentBalance = account.getAccount_current_balance();
         double transactionAmount = transactionToDelete.getTrns_amount();
         TransactionType type = transactionToDelete.getTrns_type();
         double newBalance;
         if (type == TransactionType.CREDIT) {
-            newBalance = currentBalance - transactionAmount;
+            newBalance = currentBalance + transactionAmount;
         } else if (type == TransactionType.DEBIT) {
             newBalance = currentBalance + transactionAmount;
         } else {
@@ -268,10 +274,13 @@ public class TransactionChainingManager {
         account.setAccount_current_balance(newBalance);
         account.setAccount_updated_date(new Date());
         accountDao.update(account);
+        transactionDao.delete(transactionToDelete);
+//        if (recurringDao.getRecurringById(transactionToDelete.getRecurring_id()) != null)
+//        recurringDao.deleteRecurringById(transactionToDelete.getRecurring_id());
     }
 
     // WALLET Account Transactions
-    public void createWalletTransaction(Transaction transaction) {
+    public void createWalletTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -300,7 +309,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateWalletTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateWalletTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -360,7 +369,7 @@ public class TransactionChainingManager {
     }
 
     // LOAN Account Transactions
-    public void createLoanTransaction(Transaction transaction) {
+    public void createLoanTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -389,7 +398,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateLoanTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateLoanTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -449,7 +458,7 @@ public class TransactionChainingManager {
     }
 
     // LENDING Account Transactions
-    public void createLendingTransaction(Transaction transaction) {
+    public void createLendingTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -478,7 +487,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateLendingTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateLendingTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -538,7 +547,7 @@ public class TransactionChainingManager {
     }
 
     // CREDIT_CARD Account Transactions
-    public void createCreditCardTransaction(Transaction transaction) {
+    public void createCreditCardTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -567,7 +576,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateCreditCardTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateCreditCardTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -627,7 +636,7 @@ public class TransactionChainingManager {
     }
 
     // INSURANCE Account Transactions
-    public void createInsuranceTransaction(Transaction transaction) {
+    public void createInsuranceTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -656,7 +665,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateInsuranceTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateInsuranceTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -716,7 +725,7 @@ public class TransactionChainingManager {
     }
 
     // INVESTMENT Account Transactions
-    public void createInvestmentTransaction(Transaction transaction) {
+    public void createInvestmentTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -745,7 +754,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateInvestmentTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateInvestmentTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -805,7 +814,7 @@ public class TransactionChainingManager {
     }
 
     // E_WALLET Account Transactions
-    public void createEWalletTransaction(Transaction transaction) {
+    public void createEWalletTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -834,7 +843,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateEWalletTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateEWalletTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }
@@ -894,7 +903,7 @@ public class TransactionChainingManager {
     }
 
     // OTHER_ASSET Account Transactions
-    public void createOtherAssetTransaction(Transaction transaction) {
+    public void createOtherAssetTransaction(Transaction transaction, Recurring recurring) {
         if (transaction == null || transaction.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction cannot be null and must have a valid account_id.");
         }
@@ -923,7 +932,7 @@ public class TransactionChainingManager {
         accountDao.update(account);
     }
 
-    public void updateOtherAssetTransaction(Transaction transactionToUpdate, Transaction oldTransactionState) {
+    public void updateOtherAssetTransaction(Transaction transactionToUpdate, Transaction oldTransactionState, Recurring recurring) {
         if (transactionToUpdate == null || transactionToUpdate.getTrns_id() == 0 || transactionToUpdate.getAccount_id() == 0) {
             throw new IllegalArgumentException("Transaction to update cannot be null and must have valid trns_id and account_id.");
         }

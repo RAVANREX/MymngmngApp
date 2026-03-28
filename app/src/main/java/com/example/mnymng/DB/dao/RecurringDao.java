@@ -25,6 +25,9 @@ public interface RecurringDao {
     void delete(Recurring recurring);
     @Delete
     void deleteAll(List<Recurring> recurring);
+
+    @Query("DELETE FROM recurring WHERE recurring_id = :recurringId")
+    void deleteRecurringById(long recurringId);
     @Query("SELECT * FROM recurring")
     List<Recurring> getAllRecurring();
 
@@ -32,6 +35,9 @@ public interface RecurringDao {
 
     @Query("SELECT * FROM recurring WHERE recurring_id = :recurringId")
     LiveData<Recurring> getRecurringById(long recurringId);
+
+    @Query("SELECT * FROM recurring WHERE recurring_id = :recurringId")
+    Recurring getRecurringByIdSync(long recurringId);
 
     @Query("SELECT * FROM recurring ORDER BY recurring_sdt DESC")
     LiveData<List<Recurring>> getAllRecurringTransactions();

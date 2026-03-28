@@ -131,26 +131,29 @@ public class TransactionTypeFragment extends Fragment {
             if (getArguments().containsKey("selectedAccount")) {
                 currentAccount = (Account) getArguments().getSerializable("selectedAccount");
                 categoryType = null;
-                Log.i("TransactionTypeFragment", "Received Account: " + (currentAccount != null ? currentAccount.getAccount_name() : "null"));
+                //Log.i("TransactionTypeFragment", "Received Account: " + (currentAccount != null ? currentAccount.getAccount_name() : "null"));
             }
-
             // CategoryType can be passed alongside an account, or as the primary argument
             if (getArguments().containsKey("transaction_type")) {
                 categoryType = TransactionTypeFragmentArgs.fromBundle(getArguments()).getTransactionType();
-                Log.i("TransactionTypeFragment", "Received CategoryType: " + categoryType);
+                //Log.i("TransactionTypeFragment", "Received CategoryType: " + categoryType);
+            }
+            if (getArguments().containsKey("recurring_type")) {
+                categoryType = TransactionTypeFragmentArgs.fromBundle(getArguments()).getTransactionType();
+                //Log.i("TransactionTypeFragment", "Received CategoryType: " + categoryType);
             }
         }
 
-        if (currentAccount == null && categoryType == null) {
-            Log.e("TransactionTypeFragment", "CRITICAL: No Account or CategoryType provided. Fragment may not function correctly.");
+        //if (currentAccount == null && categoryType == null) {
+            //Log.e("TransactionTypeFragment", "CRITICAL: No Account or CategoryType provided. Fragment may not function correctly.");
             // Consider setting a default or showing an error message to the user / navigating back.
             // For now, we'll let it proceed, but loadInitialTransactions will likely show nothing.
             // categoryType = CategoryType.EXPENSE; // Example fallback
-        }
+        //}
 
     }
 
-    @SuppressLint("MissingInflatedId")
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_common, container, false);

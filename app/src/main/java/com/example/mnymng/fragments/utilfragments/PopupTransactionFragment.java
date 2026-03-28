@@ -145,7 +145,7 @@ public class PopupTransactionFragment extends DialogFragment {
 //                            transactionToEdit.setTrns_date(transactionHandelerFragment.getTransactionData().getTrns_date());
                             if (transactionToEdit != null) {
                                 Executors.newSingleThreadExecutor().execute(() -> {
-                                    TransactionChainingManager.getInstance(getContext()).updateTransaction(transactionHandelerFragment.getTransactionData(),transactionToEdit);
+                                    TransactionChainingManager.getInstance(getContext()).updateTransaction(transactionHandelerFragment.getTransactionData(),transactionToEdit,transactionHandelerFragment.getRecurringData());
                                 });
                             } else {
                                 Toast.makeText(getContext(), "Transaction data is null", Toast.LENGTH_SHORT).show();
@@ -167,7 +167,7 @@ public class PopupTransactionFragment extends DialogFragment {
                                 return;
                             }
                             Executors.newSingleThreadExecutor().execute(() -> {
-                                TransactionChainingManager.getInstance(getContext()).createTransaction(newTransaction);
+                                TransactionChainingManager.getInstance(getContext()).createTransaction(newTransaction,transactionHandelerFragment.getRecurringData());
                         });
                         }
                         // Executors.newSingleThreadExecutor().execute(() -> transactionDao.insert(newTransaction));

@@ -5,6 +5,8 @@ import java.io.Serializable; // Added import
 public enum CategoryType implements Serializable { // Added implements Serializable
     INCOME,
     EXPENSE,
+  // RECURRING,
+
     TRIP
 
     // Add other category types as needed

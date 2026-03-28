@@ -64,10 +64,10 @@ public class DbOperationOnStart extends Fragment {
 
          for (Recurring recurring : allRecurring) {
              // Get the last transaction based on recurring.getLastTransactionId()
-             if(recurring.getLastTransactionId() != null) {
-                 Transaction lastTransaction = transactionDao.getTransactionByIdNoneLive((recurring.getLastTransactionId()));
-                 System.out.println("Placeholder: completePendingRecurringTransactions() called" + lastTransaction);
-             }
+//             if(recurring.getLastTransactionId() != null) {
+//                 Transaction lastTransaction = transactionDao.getTransactionByIdNoneLive((recurring.getLastTransactionId()));
+//                 System.out.println("Placeholder: completePendingRecurringTransactions() called" + lastTransaction);
+//             }
              // Date nextDueDate = recurring.getRecurringNextDueDate(); // Assuming a getter
              System.out.println("Placeholder: completePendingRecurringTransactions() called");
             // if (nextDueDate == null && lastTransaction != null) {

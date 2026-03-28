@@ -50,12 +50,12 @@ public class HomeWindow extends AppCompatActivity {
         drawerLayout = findViewById(R.id.activity_home);
 
         NavigationView navView = findViewById(R.id.nav_view);
-         DisplayMetrics displayMetrics = new DisplayMetrics();
-         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-         int screenWidth = displayMetrics.widthPixels;
-         ViewGroup.LayoutParams params = navView.getLayoutParams();
-         params.width = screenWidth / 2;
-         navView.setLayoutParams(params);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = displayMetrics.widthPixels;
+        ViewGroup.LayoutParams params = navView.getLayoutParams();
+        params.width = screenWidth / 2;
+        navView.setLayoutParams(params);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
@@ -65,7 +65,7 @@ public class HomeWindow extends AppCompatActivity {
             appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.fragment_dashboard, R.id.fragment_expense,
                     R.id.fragment_income,
-                   R.id.fragment_trip)
+                    R.id.fragment_trip)
                     .setOpenableLayout(drawerLayout)
                     .build();
 

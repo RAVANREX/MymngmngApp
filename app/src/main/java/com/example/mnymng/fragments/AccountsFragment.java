@@ -35,7 +35,6 @@ import com.example.mnymng.fragments.utilfragments.CataListFragment;
 import com.example.mnymng.fragments.utilfragments.PopupAccountFragment;
 import com.example.mnymng.fragments.utilfragments.PopupTransactionFragment;
 import com.example.mnymng.model.AccountsItem;
-import com.example.mnymng.model.ListItem;
 import com.example.mnymng.viewmodel.AccountViewModel;
 import com.example.mnymng.viewmodel.TransactionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

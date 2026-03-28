@@ -136,7 +136,7 @@ public class PopupAccountFragment extends DialogFragment {
                             // accountToEdit.setSomeField(accountHandlerFragment.getAccountData().getSomeField());
                             if (accountToEdit != null) { // Redundant check, but safe
                                 Executors.newSingleThreadExecutor().execute(() -> {
-                                    // AppDatabase.getDatabase(getContext()).performDaoAction(accountDao, dao -> dao.update(accountToEdit));
+                                     AppDatabase.getDatabase(getContext()).performDaoAction(accountDao, dao -> dao.update(accountToEdit));
                                     accountDao.update(((AccountHandlerFragment) handlerFragment).getAccountData()); // Direct DAO call
                                 });
                                 Toast.makeText(getContext(), "Account updated", Toast.LENGTH_SHORT).show();

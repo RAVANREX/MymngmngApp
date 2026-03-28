@@ -40,7 +40,7 @@ public class Transaction implements Serializable {
     @ColumnInfo(name = "trns_name")
     public String trns_name;
     @ColumnInfo(name = "trns_type")
-    public TransactionType trns_type; // TODO: Replace with Enum (credit/debit/transfer) -> Done
+    public TransactionType trns_type;
     @ColumnInfo(name = "trns_amount")
     public double trns_amount;
     @ColumnInfo(name = "trns_date")

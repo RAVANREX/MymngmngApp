@@ -22,6 +22,17 @@
             android:defaultValue="EXPENSE" />
     </fragment>
 
+<!--    <fragment-->
+<!--        android:id="@+id/fragment_recurring"-->
+<!--        android:name="com.example.mnymng.fragments.TransactionTypeFragment"-->
+<!--        android:label="Recurring"-->
+<!--        tools:layout="@layout/fragment_common">-->
+<!--        <argument-->
+<!--            android:name="recurring_type"-->
+<!--            app:argType="com.example.mnymng.DB.enums.CategoryType"-->
+<!--            android:defaultValue="RECURRING" />-->
+<!--    </fragment>-->
+
     <fragment
         android:id="@+id/accountTransactionFragment"
         android:name="com.example.mnymng.fragments.TransactionTypeFragment"
