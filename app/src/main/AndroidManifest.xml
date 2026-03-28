@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name=".HomeWindow"
-            android:exported="false" /> 
+            android:exported="false" />
     </application>
 
 </manifest>
